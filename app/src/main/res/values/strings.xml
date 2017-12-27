@@ -1,0 +1,85 @@
+<resources>
+    <string name="app_name">BankApp</string>
+
+    <string name="string_main_function_register">挂号服务</string>
+    <string name="string_main_function_illegalr">违章查询</string>
+    <string name="string_main_function_cost">e缴费</string>
+    <string name="string_main_function_business">业务查询</string>
+    <string name="string_main_function_identity">身份认证</string>
+    <string name="string_main_function_money">理财产品</string>
+
+    <string name="string_main_service">FANFAN为您服务</string>
+
+    <!-- register 挂号 -->
+    <string name="string_register_personal_foreign">个人(有外汇)</string>
+    <string name="string_register_personal">个人(无外汇)</string>
+    <string name="string_register_public">对公</string>
+    <string name="string_register_appointment">预约</string>
+    <string name="string_register_lineup">当前排队情况：</string>
+    <string name="string_register_red">繁忙</string>
+    <string name="string_register_blue">对公业务畅通</string>
+    <string name="string_register_green">个人业务空闲</string>
+    <string name="string_register_select_lineup">立即排队</string>
+    <string name="string_register_select_appointment">预约取号</string>
+    <string name="string_register_type">业务种类</string>
+    <string name="string_register_line_num">当前排队人数</string>
+    <string name="string_register_apply">申请</string>
+    <string name="string_register_applynow">立即申请</string>
+    <string name="string_register_updatatime">更新时间为：</string>
+    <string name="string_register_tip_one">“立即排号”是您现在有时间在我行办理业务，并为你预约排号。</string>
+    <string name="string_register_tip_two">立即排号仅支持当日900-16:00。</string>
+    <string name="string_register_tip_three">“预约取号”是您稍后选择一个时间在我行办理业务，我行为您提供有限排队服务。</string>
+    <string name="string_register_tip">温馨提示</string>
+    <string name="string_register_noappointment">我行暂不支持预约业务</string>
+    <!-- 业务 -->
+    <string name="string_business_guideone">FANFAN可以带您去指定地点</string>
+    <string name="string_business_guidetwo">如需帮助请点击红色按钮</string>
+    <string name="string_business_guidethree">FANFAN可以带您去指定地点如需带领请点击红色按钮</string>
+    <string name="string_business_guide_two">如需其他帮助，建议您到大堂服务处询问相关工作人员</string>
+    <!-- 理财产品 -->
+    <string name="string_money_introduce">理财介绍</string>
+    <string name="string_money_introduce_finance">理财与财经</string>
+    <string name="string_money_currentmoney">活期理财</string>
+    <string name="string_money_current_right">随存随取 精打细算</string>
+    <!-- 理财产品转入 -->
+    <string name="string_money_product_today">当日计息</string>
+    <string name="string_money_product_access">灵活存取</string>
+    <string name="string_money_product_win">收益更高</string>
+    <string name="string_money_product_rule">交易规则</string>
+    <string name="string_money_product_into">资金转入</string>
+    <string name="string_money_product_win_rule">收益规则</string>
+    <string name="string_money_product_out">资金转出</string>
+    <string name="string_money_product_into_content">1000元起投，1元递增</string>
+    <string name="string_money_product_win_rule_content">当天15:00前转入，当天产生收益(周末及法定节假日顺延)，第二天可查看收益</string>
+    <string name="string_money_product_out_content">当天15:00前转入，资金预计第二天23:59前到账(周末及法定节假日顺延),不支持2小时内快速到账，转出当天无收益</string>
+    <string name="string_money_product_into_now">立即转入</string>
+
+    <!-- 完善信息 -->
+    <string name="string_perfect_complite">完成实名认证，保障合法权益</string>
+    <string name="string_perfect_name">姓名</string>
+    <string name="string_perfect_idcard">身份证</string>
+    <string name="string_perfect_phone">手机号码</string>
+    <string name="string_perfect_finish">完成</string>
+    <string name="string_perfect_hint">请输入有效信息</string>
+    <string name="string_perfect_agree">我已阅读并同意签署</string>
+    <string name="string_perfect_agreement">使用协议</string>
+
+    <!-- 挂号服务 -->
+    <string name="string_register_service_address">取号网点:</string>
+    <string name="string_register_service_name">办理人姓名:</string>
+    <string name="string_register_service_phone">办理人手机号码:</string>
+    <string name="string_register_service_idcard">办理人身份证号码:</string>
+    <string name="string_register_service_bank">银行卡号码:</string>
+    <string name="string_register_service_handleidcard">办理人身份证照片</string>
+    <string name="string_register_service_handleibank">银行卡照片</string>
+    <string name="string_register_service_positive">正面:</string>
+    <string name="string_register_service_opposite">反面:</string>
+    <string name="string_register_take_photo">拍照</string>
+    <string name="string_register_pick_photo">从相册里选取</string>
+    <string name="string_register_cancel">取消</string>
+    <!-- 人脸识别部分 -->
+    <string name="string_face_add">人脸添加</string>
+    <string name="string_face_distinguish">人脸识别</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

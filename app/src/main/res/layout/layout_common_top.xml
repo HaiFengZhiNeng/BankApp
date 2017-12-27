@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="110px"
+    android:background="@color/color_white">
+
+    <TextView
+        android:id="@+id/tv_goBack"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:drawableLeft="@mipmap/ic_goback"
+        android:gravity="center"
+        android:padding="10px"
+        android:text="返回"
+        android:drawablePadding="5px"
+        android:textColor="@color/color_commom_top"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="40px"
+        android:gravity="center"
+        android:text="石景山支行挂号服务"
+        android:textColor="@color/color_main_function_item"
+        android:textSize="28sp" />
+
+    <ImageView
+        android:id="@+id/iv_addData"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:src="@mipmap/ic_top_right" />
+</RelativeLayout>

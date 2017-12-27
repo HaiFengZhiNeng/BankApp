@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10px"
+    android:orientation="horizontal">
+
+
+    <TextView
+        android:id="@+id/tv_bussinessType"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/color_main_function_item"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_lineNum"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:paddingLeft="20px"
+        android:text=""
+        android:textColor="@color/color_main_function_item"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_apply"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="5px"
+        android:background="@drawable/layout_register_line_item_apply"
+        android:gravity="center"
+        android:text="@string/string_register_applynow"
+        android:textColor="@color/color_red"
+        android:textSize="18sp" />
+</LinearLayout>

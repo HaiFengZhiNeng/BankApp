@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_setting_top" />
+
+    <LinearLayout
+        android:id="@+id/voice_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="50px"
+        android:divider="@color/color_main_function_item"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+
+            <EditText
+                android:id="@+id/ed_question"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="视频名称："
+                android:inputType="textPhonetic"
+                android:textColor="@color/color_main_function_item"
+                android:textColorHint="@color/color_main_function_item"
+                android:textCursorDrawable="@drawable/edit_cursor_color"
+                android:textSize="40px" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80px"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:padding="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="地址："
+                android:textColor="@color/color_main_function_item"
+                android:textSize="40px" />
+
+            <TextView
+                android:id="@+id/tv_video_answer"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:hint="点击进行选择"
+                android:inputType="textPhonetic"
+                android:textColor="@color/color_main_function_item"
+                android:textColorHint="@color/color_main_function_item" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30px"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/tv_add"
+                android:layout_width="300px"
+                android:layout_height="70dp"
+                android:gravity="center"
+                android:background="@drawable/layout_addvideo_back"
+                android:text="添 加"
+                android:textColor="@color/color_main_function_item"
+                android:textSize="40px" />
+
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_distinguish_back"
+    tools:context="com.example.bankapp.distinguish.faceDistinguish.FaceDistinguishView">
+
+    <include
+        android:id="@+id/layout_top"
+        layout="@layout/layout_common_top" />
+
+    <TextView
+        android:id="@+id/tv_addPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/layout_top"
+        android:padding="15px"
+        android:text="@string/string_face_add"
+        android:textColor="@color/color_white"
+        android:textSize="20sp" />
+
+    <RelativeLayout
+        android:id="@+id/camera_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tv_addPhoto"
+        android:visibility="visible">
+
+        <SurfaceView
+            android:id="@+id/opengl_surfaceview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.example.bankapp.view.takephoto.DrawSurfaceView
+            android:id="@+id/draw_sufaceView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10px" />
+
+        <com.example.bankapp.view.takephoto.DetectOpenFaceView
+            android:id="@+id/opencv_face_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10px" />
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_distinguish_back"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_common_top" />
+
+    <RelativeLayout
+        android:id="@+id/surface_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true"
+        android:layout_weight="1">
+
+        <SurfaceView
+            android:id="@+id/opengl_layout_surfaceview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10px" />
+
+        <com.example.bankapp.view.takephoto.DrawSurfaceView
+            android:id="@+id/draw_sufaceView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10px" />
+
+        <com.example.bankapp.view.takephoto.DetectionFaceView
+            android:id="@+id/detection_face_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10px" />
+
+        <com.example.bankapp.view.takephoto.DetectOpenFaceView
+            android:id="@+id/opencv_face_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10px" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/ic_takephoto_left_top" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@mipmap/ic_takephoto_right_top" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+
+            android:background="@mipmap/ic_takephoto_left_bottom" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="@mipmap/ic_takephoto_right_bottom" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/surface_layout"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:paddingBottom="20px"
+        android:paddingTop="20px">
+
+        <TextView
+            android:id="@+id/tv_add_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10px"
+            android:background="@mipmap/ic_take_background"
+            android:gravity="center"
+            android:text="添加"
+            android:textColor="@color/color_white"
+            android:textSize="30px" />
+    </RelativeLayout>
+
+</LinearLayout>

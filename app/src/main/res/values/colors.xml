@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#e1e1e1</color>
+
+    <color name="color_white">#fff</color>
+    <color name="color_main_function_item">#222222</color>
+    <color name="color_main_line">#e9e9e9</color>
+    <color name="color_commom_top">#666666</color>
+    <color name="color_main_line_vertical">#cdcdcd</color>
+    <color name="color_mian_news">#555</color>
+    <color name="color_red">#f00</color>
+    <!-- register 挂号 -->
+    <color name="color_register_select_stroke">#4d6274</color>
+    <color name="color_register_select_item_back">#8598A9</color>
+    <color name="color_register_line_time">#a2a2a2</color>
+    <color name="color_register_line_tip">#cfcfcf</color>
+    <!-- 业务 -->
+    <color name="color_business_top_back">#f6f6f6</color>
+    <!-- 理财产品 -->
+    <color name="color_money_current">#dd3838</color>
+    <color name="color_money_current_right">#9E9E9E</color>
+    <color name="color_money_current_item_one">#999</color>
+    <color name="color_money_current_item_two">#4D4D4D</color>
+    <color name="color_money_current_item_three">#e97751</color>
+
+    <!-- 理财产品转入 -->
+    <color name="color_money_product_back">#f8f8f8</color>
+    <color name="color_money_product_item">#a1a1a1</color>
+    <color name="color_money_product_content">#303030</color>
+
+    <!-- 完善信息 -->
+    <color name="color_perfect_info_edit_hint">#acabab</color>
+    <color name="color_perfect_info_agreement">#8e8e8e</color>
+
+    <!-- 人脸识别 -->
+    <color name="color_distinguish_back">#1A1A1A</color>
+
+    <!-- 添加本地数据 -->
+    <color name="color_local_adddata">#00000000</color>
+</resources>

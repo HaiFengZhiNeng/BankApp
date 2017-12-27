@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.bankapp.register.RegisterView">
+
+    <include layout="@layout/layout_common_top" />
+
+    <View
+        style="@style/style_register_line"
+        android:layout_marginTop="20px" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20px"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/tv_registerPersonalForeign"
+                style="@style/style_register_item"
+                android:text="@string/string_register_personal_foreign"
+                android:textColor="@color/color_red" />
+
+            <TextView
+                android:id="@+id/tv_registerPersonal"
+                style="@style/style_register_item"
+                android:text="@string/string_register_personal" />
+
+            <TextView
+                android:id="@+id/tv_registerPublic"
+                style="@style/style_register_item"
+                android:text="@string/string_register_public" />
+
+            <TextView
+                android:id="@+id/tv_registerAppointment"
+                style="@style/style_register_item"
+                android:text="@string/string_register_appointment" />
+        </LinearLayout>
+
+
+        <View
+            style="@style/style_main_line"
+            android:layout_marginTop="20px" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10px"
+            android:layout_marginLeft="20px"
+            android:layout_marginTop="10px"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/string_register_lineup"
+                android:textColor="@color/color_main_function_item"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/style_register_business_item"
+                    android:drawableLeft="@mipmap/ic_regiest_red"
+                    android:text="@string/string_register_red" />
+
+                <TextView
+                    style="@style/style_register_business_item"
+                    android:drawableLeft="@mipmap/ic_register_blue"
+                    android:text="@string/string_register_blue" />
+
+                <TextView
+                    style="@style/style_register_business_item"
+                    android:drawableLeft="@mipmap/ic_register_green"
+                    android:text="@string/string_register_green" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            style="@style/style_main_line"
+            android:layout_marginTop="10px" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="600px"
+                android:layout_height="96px"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="30px"
+                android:background="@drawable/layout_register_select"
+                android:orientation="horizontal"
+                android:padding="3px">
+
+                <TextView
+                    android:id="@+id/tv_registerSelectLineUp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/layout_register_select_left_pressed"
+                    android:gravity="center"
+                    android:text="@string/string_register_select_lineup"
+                    android:textColor="@color/color_white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/tv_registerSelectAppointment"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/layout_register_select_right"
+                    android:gravity="center"
+                    android:text="@string/string_register_select_appointment"
+                    android:textColor="@color/color_main_function_item"
+                    android:textSize="20sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_appointment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="160px"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/string_register_noappointment"
+                android:textColor="@color/color_main_function_item"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_linup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="10px">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/string_register_type"
+                    android:textColor="@color/color_main_function_item"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@string/string_register_line_num"
+                    android:textColor="@color/color_main_function_item"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/string_register_apply"
+                    android:textColor="@color/color_main_function_item"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="550px"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_registerLineUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/string_register_updatatime"
+                        android:textColor="@color/color_main_function_item"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tv_updataTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_main_function_item"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <View
+                    style="@style/style_register_line_time"
+                    android:layout_marginTop="30px" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <include layout="@layout/layout_register_tip" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        android:orientation="vertical">
+
+        <View
+            style="@style/style_main_line"
+            android:layout_below="@id/ll_function" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@mipmap/ic_main_bottom_logo" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

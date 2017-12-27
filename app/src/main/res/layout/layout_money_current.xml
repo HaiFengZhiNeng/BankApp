@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="30px"
+    android:paddingTop="18px">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_urrentType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="天天盈利"
+            android:textColor="@color/color_main_function_item"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_currentPercentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="20px"
+            android:text="4.20%~5.5%"
+            android:textColor="@color/color_money_current_item_three"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_urrentTypeTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:text="昨日收益率"
+            android:textColor="@color/color_money_current_item_one"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <View
+        style="@style/style_main_line_vertical"
+        android:layout_centerInParent="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="210px"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20px"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="理财期限"
+                android:textColor="@color/color_money_current_item_one"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_currentTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="随存随取"
+                android:textColor="@color/color_money_current_item_two"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="210px"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20px"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="理财期限"
+                android:textColor="@color/color_money_current_item_one"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_currentAmount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text=" 1 元 "
+                android:textColor="@color/color_money_current_item_two"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

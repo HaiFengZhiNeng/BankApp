@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:orientation="vertical"
+    tools:context="com.example.bankapp.business.BusinessView">
+
+    <include layout="@layout/layout_common_top" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="500px"
+            android:background="@color/color_business_top_back">
+
+            <View
+                android:layout_width="225px"
+                android:layout_height="380px"
+                android:layout_alignParentLeft="true"
+                android:background="@color/color_white" />
+
+            <LinearLayout
+                android:id="@+id/ll_pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="166px"
+                android:layout_marginTop="107px"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="自主缴费"
+                    android:textColor="@color/color_main_function_item"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_business_red" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_window_view"
+                android:layout_width="810px"
+                android:layout_height="110px"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="1"
+                    android:background="@color/color_white" />
+
+                <View style="@style/style_main_line_vertical" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="1"
+                    android:background="@color/color_white" />
+
+                <View style="@style/style_main_line_vertical" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="1"
+                    android:background="@color/color_white" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_window"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="345px"
+                android:layout_marginTop="55px"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="柜台窗口"
+                    android:textColor="@color/color_main_function_item"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_business_red" />
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="123px"
+                android:layout_height="340px"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/ll_window_view"
+                android:background="@color/color_white" />
+
+            <LinearLayout
+                android:id="@+id/ll_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="60px"
+                android:layout_marginTop="246px"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="理财赚专区"
+                    android:textColor="@color/color_main_function_item"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_business_red" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="211px"
+                android:layout_height="70px"
+                android:layout_centerInParent="true"
+                android:background="@color/color_white" />
+
+            <LinearLayout
+                android:id="@+id/ll_service"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="60px"
+                android:layout_marginTop="246px"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="大堂服务"
+                    android:textColor="@color/color_main_function_item"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_business_red" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="70px"
+            android:paddingTop="90px">
+
+            <ImageView
+                android:layout_width="321px"
+                android:layout_height="518px"
+                android:src="@mipmap/ic_business_robot" />
+
+            <LinearLayout
+                android:layout_width="403px"
+                android:layout_height="80px"
+                android:layout_marginLeft="142px"
+                android:layout_marginTop="140px"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/string_business_guideone"
+                    android:textColor="@color/color_main_function_item"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/string_business_guidetwo"
+                    android:textColor="@color/color_main_function_item"
+                    android:textSize="22sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <include layout="@layout/layout_business_tip" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        android:orientation="vertical">
+
+        <View
+            style="@style/style_main_line"
+            android:layout_below="@id/ll_function" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@mipmap/ic_main_bottom_logo" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

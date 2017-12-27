@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:padding="5px">
+
+    <TextView
+        android:id="@+id/tv_chatPersonal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20px"
+        android:layout_toLeftOf="@id/iv_chatPersonal"
+        android:background="@drawable/ic_chat_back_right"
+        android:gravity="center_vertical"
+        android:padding="20px"
+        android:textColor="@color/color_main_function_item"
+        android:textSize="17sp" />
+
+    <ImageView
+        android:id="@+id/iv_chatPersonal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/ic_chat_personal" />
+
+</RelativeLayout>

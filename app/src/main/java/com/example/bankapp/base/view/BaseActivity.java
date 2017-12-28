@@ -9,7 +9,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
+import com.example.bankapp.BankApplication;
+import com.example.bankapp.util.NetUtil;
 import com.example.bankapp.util.PromptManager;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.ButterKnife;
 
@@ -22,17 +27,33 @@ import butterknife.ButterKnife;
 public abstract class BaseActivity extends FragmentActivity {
     String TAG = this.getClass().getSimpleName();
 
+
+    protected BankApplication application;
     protected Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initActivity();
         onViewCreateBefore();
         onSetContentView();
         ButterKnife.bind(this);
         onViewCreated();
         setOnListener();
     }
+
+    protected void initActivity() {
+        if (application == null) {
+            application = (BankApplication) getApplicationContext();
+        }
+        application.addActivity(this);
+
+        if (NetUtil.getNetworkState(application.getApplicationContext()) == -1) {
+            showToast("无网络链接");
+        }
+    }
+
+    ;
 
     /**
      * called by {@link # onCreate}
@@ -167,4 +188,5 @@ public abstract class BaseActivity extends FragmentActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
 }

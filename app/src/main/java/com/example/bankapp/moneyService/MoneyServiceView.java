@@ -120,8 +120,8 @@ public class MoneyServiceView extends PresenterActivity<MoneyServicePresenter> i
         filter.addAction(mPresenter.ACTION_OTHER_EXIT);
         filter.addAction(mPresenter.ACTION_OTHER_RESULT);
         registerReceiver(businessReceiver, filter);
-        addSpeakAnswer(resFoFinal(R.array.manual_location_voice));
-
+        // 一进入就说话 ： 可以通过关键词向我提问
+//        addSpeakAnswer(resFoFinal(R.array.manual_location_voice));
     }
 
     @Override

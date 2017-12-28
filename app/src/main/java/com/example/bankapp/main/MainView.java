@@ -16,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bankapp.R;
 import com.example.bankapp.adapter.ChatAdapter;
@@ -24,6 +25,7 @@ import com.example.bankapp.addLocalData.AddDataView;
 import com.example.bankapp.animator.SlideInOutBottomItemAnimator;
 import com.example.bankapp.asr.MySpeech;
 import com.example.bankapp.base.handler.BaseHandler;
+import com.example.bankapp.base.view.BaseActivity;
 import com.example.bankapp.base.view.PresenterActivity;
 import com.example.bankapp.business.BusinessView;
 import com.example.bankapp.common.enums.SpecialType;
@@ -47,6 +49,8 @@ import com.jude.rollviewpager.hintview.ColorPointHintView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;

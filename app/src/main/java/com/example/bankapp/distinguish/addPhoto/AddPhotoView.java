@@ -127,6 +127,7 @@ public class AddPhotoView extends PresenterActivity<AddPhotoPresenter> implement
                             os.write(buffer, 0, bytesRead);
                         }
                         is.close();
+
                         os.close();
 
                         mJavaDetector = new CascadeClassifier(mCascadeFile.getAbsolutePath());

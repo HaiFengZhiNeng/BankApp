@@ -1,11 +1,15 @@
 package com.example.bankapp;
 
+import android.app.Activity;
 import android.app.Application;
 
 import com.example.bankapp.database.base.BaseManager;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.youdao.sdk.app.YouDaoApplication;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Guanluocang
@@ -21,6 +25,9 @@ public class BankApplication extends Application {
     private boolean isAutoAction;
 
     private String mEngineType;//TYPE_LOCAL
+
+    // 保存所有的Activity
+    private List<Activity> activityList;
 
     @Override
     public void onCreate() {
@@ -64,5 +71,38 @@ public class BankApplication extends Application {
 
     public void setAutoAction(boolean autoAction) {
         isAutoAction = autoAction;
+    }
+
+    /**
+     * 添加activity到activityList集合中
+     *
+     * @param activity 每一個activity
+     */
+
+    public void addActivity(Activity activity) {
+        if (activityList == null) {
+            activityList = new ArrayList<Activity>();
+        }
+        activityList.add(activity);
+    }
+
+    /**
+     * 清空列表，取消引用
+     */
+    public void clearActivity() {
+        activityList.clear();
+    }
+
+    /**
+     * app退出
+     */
+    public void exit() {
+        for (Activity activity : activityList) {
+            if (!activity.isFinishing() && activity != null) {
+                activity.finish();
+            }
+        }
+//        clearActivity();
+        System.exit(0);
     }
 }

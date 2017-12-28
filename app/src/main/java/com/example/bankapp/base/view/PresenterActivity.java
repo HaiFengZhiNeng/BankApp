@@ -240,9 +240,9 @@ public abstract class PresenterActivity<T extends BasePresenter> extends BaseAct
                 mSerialPresenter.receiveMotion(ComType.A, "A50C80F3AA");
                 //     mSerialPresenter.receiveMotion(ComType.A, "A5038002AA");
                 break;
-//            case KeyEvent.KEYCODE_BACK:
-//                finish();
-//                break;
+            case KeyEvent.KEYCODE_BACK:
+                finish();
+                break;
             case KeyEvent.KEYCODE_BUTTON_X:
                 mSerialPresenter.receiveMotion(ComType.A, "A50C80F2AA");
                 //       onKeyDown(KeyEvent.KEYCODE_BACK, event);

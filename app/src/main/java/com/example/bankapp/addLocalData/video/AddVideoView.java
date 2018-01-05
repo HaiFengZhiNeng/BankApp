@@ -5,14 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.bankapp.R;
 import com.example.bankapp.asr.MySpeech;
@@ -27,6 +25,7 @@ import com.example.bankapp.modle.voice.Poetry;
 import com.example.bankapp.modle.voice.radio.Radio;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -47,6 +46,8 @@ public class AddVideoView extends PresenterActivity<AddVideoPresenter> implement
     TextView tvAdd;
     @BindView(R.id.iv_goback)
     ImageView ivGoback;
+    @BindView(R.id.iv_addData)
+    ImageView ivAddData;
 
     private IntroduceFinanceManager introduceFinanceManager;
 
@@ -78,7 +79,13 @@ public class AddVideoView extends PresenterActivity<AddVideoPresenter> implement
     @Override
     protected void onViewCreated() {
         super.onViewCreated();
+        initView();
+
+    }
+
+    private void initView() {
         introduceFinanceManager = new IntroduceFinanceManager();
+        ivAddData.setVisibility(View.GONE);
     }
 
     /**
@@ -221,4 +228,11 @@ public class AddVideoView extends PresenterActivity<AddVideoPresenter> implement
     public void doCallPhone(String phoneNumber) {
 
     }
+
+    @Override
+    public void doDance() {
+
+    }
+
+
 }

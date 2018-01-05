@@ -18,15 +18,16 @@ import java.util.List;
 
 public class MoneyIntroduceAdapter extends BaseAdapter<LocalMoneyService> {
 
-
     public MoneyIntroduceAdapter(Context context, List<LocalMoneyService> moneyIntroduceList) {
         super(context, R.layout.layout_money_introduce, moneyIntroduceList);
-
     }
 
     @Override
     protected void convert(BaseRecyclerViewHolder viewHolder, LocalMoneyService item, int pos) {
-        viewHolder.getTextView(R.id.tv_moneyIntroduceItem).setText(item.getIntroduceQuestion());
+        viewHolder.getTextView(R.id.tv_moneyIntroduceQuestion).setText(item.getIntroduceQuestion());
+        viewHolder.getTextView(R.id.tv_moneyIntroduceAnswer).setText(item.getIntroduceAnswer());
+        viewHolder.getTextView(R.id.tv_moneyIntroduceAction).setText(item.getIntroduceAction());
+        viewHolder.getTextView(R.id.tv_moneyIntroduceExpression).setText(item.getIntroduceExpression());
     }
 
 }

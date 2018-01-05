@@ -3,6 +3,7 @@ package com.example.bankapp.base.view;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -34,6 +35,8 @@ public abstract class BaseActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //方向 竖
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         initActivity();
         onViewCreateBefore();
         onSetContentView();
@@ -53,7 +56,6 @@ public abstract class BaseActivity extends FragmentActivity {
         }
     }
 
-    ;
 
     /**
      * called by {@link # onCreate}

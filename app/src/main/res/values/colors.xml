@@ -39,4 +39,10 @@
 
     <!-- 添加本地数据 -->
     <color name="color_local_adddata">#00000000</color>
+
+    <!-- 首页二维码Style -->
+    <color name="color_translate_back">#00000000</color>
+
+    <!-- 违章查询 -->
+    <color name="color_traffic_find">#e67272</color>
 </resources>

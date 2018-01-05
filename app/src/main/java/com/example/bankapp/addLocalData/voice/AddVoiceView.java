@@ -1,12 +1,13 @@
 package com.example.bankapp.addLocalData.voice;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.bankapp.R;
 import com.example.bankapp.asr.MySpeech;
 import com.example.bankapp.base.view.PresenterActivity;
@@ -18,9 +19,10 @@ import com.example.bankapp.modle.voice.EnglishEveryday;
 import com.example.bankapp.modle.voice.News;
 import com.example.bankapp.modle.voice.Poetry;
 import com.example.bankapp.modle.voice.radio.Radio;
-import com.example.bankapp.util.PreferencesUtils;
+import com.example.bankapp.util.DialogUtils;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -37,7 +39,30 @@ public class AddVoiceView extends PresenterActivity<AddVoicePreSenter> implement
     EditText edAnswer;
     @BindView(R.id.tv_add)
     TextView tvAdd;
+    @BindView(R.id.iv_goback)
+    ImageView ivGoback;
+    @BindView(R.id.iv_addData)
+    ImageView ivAddData;
+    @BindView(R.id.tv_expression)
+    TextView tvExpression;
+    @BindView(R.id.tv_action)
+    TextView tvAction;
+    @BindView(R.id.tv_datatype)
+    TextView tvDatatype;
+
     private IntroduceManager introduceManager;
+
+    //语音
+    public static final int LOCAL_SPEECH = 0;
+    //导航
+    public static final int LOCAL_NAVIGATION = 1;
+
+    //添加的类型
+    private int addSoundType;
+
+    //添加的是哪个Item
+    private int addExpressionItem;
+    private int addActionItem;
 
     //布局文件
     @Override
@@ -69,10 +94,17 @@ public class AddVoiceView extends PresenterActivity<AddVoicePreSenter> implement
     @Override
     protected void onViewCreated() {
         super.onViewCreated();
-        introduceManager = new IntroduceManager();
+        initView();
     }
 
-    @OnClick({R.id.iv_goback, R.id.tv_add})
+    private void initView() {
+        //初始化 数据库Manager
+        introduceManager = new IntroduceManager();
+        //添加按钮 隐藏
+        ivAddData.setVisibility(View.GONE);
+    }
+
+    @OnClick({R.id.iv_goback, R.id.tv_add, R.id.tv_expression, R.id.tv_action, R.id.tv_datatype})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_goback:
@@ -80,6 +112,46 @@ public class AddVoiceView extends PresenterActivity<AddVoicePreSenter> implement
                 break;
             case R.id.tv_add:
                 addLoaclVoice();
+                break;
+            case R.id.tv_expression:
+                DialogUtils.showLongListDialog(AddVoiceView.this, "面部表情", R.array.expression, new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                        addExpressionItem = position;
+                        tvExpression.setText(text);
+                    }
+                });
+                break;
+            case R.id.tv_action:
+                int res = R.array.action;
+                if (addSoundType == LOCAL_SPEECH) {
+                    res = R.array.action;
+                } else if (addSoundType == LOCAL_NAVIGATION) {
+                    res = R.array.navigation;
+                }
+                DialogUtils.showLongListDialog(AddVoiceView.this, "执行动作", res, new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                        addActionItem = position;
+                        tvAction.setText(text);
+                    }
+                });
+                break;
+            case R.id.tv_datatype:
+                DialogUtils.showLongListDialog(AddVoiceView.this, "类型", R.array.dataType, new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+//                        curSoundType = position;
+                        tvDatatype.setText(text);
+                        if (position == 0) {
+                            addSoundType = LOCAL_SPEECH;
+                            tvAction.setText(getResources().getStringArray(R.array.action)[0]);
+                        } else {
+                            addSoundType = LOCAL_NAVIGATION;
+                            tvAction.setText(getResources().getStringArray(R.array.navigation)[0]);
+                        }
+                    }
+                });
                 break;
         }
     }
@@ -90,12 +162,28 @@ public class AddVoiceView extends PresenterActivity<AddVoicePreSenter> implement
     private void addLoaclVoice() {
         String question = edQuestion.getText().toString().trim();
         String answer = edAnswer.getText().toString().trim();
-        if (!"".equals(question) || !"".equals(answer)) {
-            introduceManager.insert(new LocalMoneyService(question, answer));
-            finish();
-        } else {
-            showToast("输入不能为空");
+        String action = tvAction.getText().toString().trim();
+        String expression = tvExpression.getText().toString().trim();
+        String type = tvDatatype.getText().toString();
+        if (isEmpty(edQuestion) || isEmpty(edAnswer) || isEmpty(tvExpression) || isEmpty(tvAction)) {
+            showToast("输入不能为空！");
+            return;
         }
+        //判断是否有数据 有 则更新 无 则 插入
+        //TODO 优化添加数据 以及点击事件
+        introduceManager.insert(new LocalMoneyService(type, question, answer, action, resArray(R.array.action)[addActionItem], expression, resArray(R.array.expression)[addExpressionItem]));
+        finish();
+        showToast("添加成功");
+    }
+
+    //判断是否为空
+    private boolean isEmpty(TextView textView) {
+        return textView.getText().toString().trim().equals("") || textView.getText().toString().trim().equals("");
+    }
+
+    //获取资源文件
+    private String[] resArray(int resId) {
+        return getResources().getStringArray(resId);
     }
 
     /**
@@ -164,5 +252,18 @@ public class AddVoiceView extends PresenterActivity<AddVoicePreSenter> implement
     @Override
     public void doCallPhone(String phoneNumber) {
 
+    }
+
+    @Override
+    public void doDance() {
+
+    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

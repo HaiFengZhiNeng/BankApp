@@ -15,21 +15,40 @@ import org.greenrobot.greendao.annotation.Property;
 public class LocalMoneyService {
     @Id
     private Long id;
-    private String introduceQuestion;
-    private String introduceAnswer;
+    private String introduceType;//类型
+    private String introduceQuestion;//问题
+    private String introduceAnswer;//答案
+    private String introduceAction;//动作
+    private String introduceActionData;//动作
+    private String introduceExpression;//表情
+    private String introduceExpressionData;//表情
 
-    @Generated(hash = 1351244576)
-    public LocalMoneyService(Long id, String introduceQuestion,
-                             String introduceAnswer) {
+    @Generated(hash = 1714746742)
+    public LocalMoneyService(Long id, String introduceType,
+                             String introduceQuestion, String introduceAnswer,
+                             String introduceAction, String introduceActionData,
+                             String introduceExpression, String introduceExpressionData) {
         this.id = id;
+        this.introduceType = introduceType;
         this.introduceQuestion = introduceQuestion;
         this.introduceAnswer = introduceAnswer;
+        this.introduceAction = introduceAction;
+        this.introduceActionData = introduceActionData;
+        this.introduceExpression = introduceExpression;
+        this.introduceExpressionData = introduceExpressionData;
     }
 
-    public LocalMoneyService(String introduceQuestion,
-                             String introduceAnswer) {
+    public LocalMoneyService(String introduceType,
+                             String introduceQuestion, String introduceAnswer,
+                             String introduceAction, String introduceActionData,
+                             String introduceExpression, String introduceExpressionData) {
+        this.introduceType = introduceType;
         this.introduceQuestion = introduceQuestion;
         this.introduceAnswer = introduceAnswer;
+        this.introduceAction = introduceAction;
+        this.introduceActionData = introduceActionData;
+        this.introduceExpression = introduceExpression;
+        this.introduceExpressionData = introduceExpressionData;
     }
 
     @Generated(hash = 1947646929)
@@ -42,6 +61,14 @@ public class LocalMoneyService {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getIntroduceType() {
+        return this.introduceType;
+    }
+
+    public void setIntroduceType(String introduceType) {
+        this.introduceType = introduceType;
     }
 
     public String getIntroduceQuestion() {
@@ -58,6 +85,38 @@ public class LocalMoneyService {
 
     public void setIntroduceAnswer(String introduceAnswer) {
         this.introduceAnswer = introduceAnswer;
+    }
+
+    public String getIntroduceAction() {
+        return this.introduceAction;
+    }
+
+    public void setIntroduceAction(String introduceAction) {
+        this.introduceAction = introduceAction;
+    }
+
+    public String getIntroduceActionData() {
+        return this.introduceActionData;
+    }
+
+    public void setIntroduceActionData(String introduceActionData) {
+        this.introduceActionData = introduceActionData;
+    }
+
+    public String getIntroduceExpression() {
+        return this.introduceExpression;
+    }
+
+    public void setIntroduceExpression(String introduceExpression) {
+        this.introduceExpression = introduceExpression;
+    }
+
+    public String getIntroduceExpressionData() {
+        return this.introduceExpressionData;
+    }
+
+    public void setIntroduceExpressionData(String introduceExpressionData) {
+        this.introduceExpressionData = introduceExpressionData;
     }
 
 

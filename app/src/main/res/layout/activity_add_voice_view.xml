@@ -20,6 +20,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/set_datatype"
+                android:textColor="@color/color_main_function_item"
+                android:textSize="40px" />
+
+            <TextView
+                android:id="@+id/tv_datatype"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="50px"
+                android:layout_weight="1"
+                android:hint="点击选择添加的类型"
+                android:textColor="@color/color_main_function_item"
+                android:textColorHint="@color/color_main_function_item"
+                android:textSize="36px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
@@ -56,6 +82,58 @@
                 android:textSize="40px" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/set_expression"
+                android:textColor="@color/color_main_function_item"
+                android:textSize="40px" />
+
+            <TextView
+                android:id="@+id/tv_expression"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="50px"
+                android:layout_weight="1"
+                android:hint="点击选择表情"
+                android:textColor="@color/color_white"
+                android:textColorHint="@color/color_main_function_item"
+                android:textSize="36px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/set_action"
+                android:textColor="@color/color_main_function_item"
+                android:textSize="40px" />
+
+            <TextView
+                android:id="@+id/tv_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="50px"
+                android:layout_weight="1"
+                android:hint="点击选择动作"
+                android:textColor="@color/color_white"
+                android:textColorHint="@color/color_main_function_item"
+                android:textSize="36px" />
+        </LinearLayout>
 
     </LinearLayout>
 

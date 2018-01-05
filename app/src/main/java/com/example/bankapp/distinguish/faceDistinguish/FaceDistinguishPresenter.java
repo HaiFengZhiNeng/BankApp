@@ -81,6 +81,7 @@ public class FaceDistinguishPresenter extends BasePresenter<IFaceDistinguishView
         isDetecting = false;
     }
 
+    //初始化holder
     void initHolder(SurfaceHolder surfaceHolder) {
         mHolder = surfaceHolder;
     }

@@ -160,6 +160,11 @@ public class MoneyProductView extends PresenterActivity<MoneyProducePresenter> i
     }
 
     @Override
+    public void doDance() {
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);

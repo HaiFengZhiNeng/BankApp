@@ -14,7 +14,7 @@ import butterknife.BindView;
 
 
 public enum SpecialType implements Serializable {
-    WakeUp, Music, Story, Joke, NoSpecial,
+    WakeUp, Music, Story, Joke, NoSpecial,Dance,
     Forward, Backoff, Turnleft, Turnright,
     BusinessService,//业务查询
     CostService,//e缴费

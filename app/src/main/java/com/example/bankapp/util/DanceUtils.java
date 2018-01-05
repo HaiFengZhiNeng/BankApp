@@ -89,6 +89,25 @@ public class DanceUtils {
         }
     }
 
+    public void startDance(Context context) {
+        if (mediaPlayer == null) {
+            initMediaplayer();
+        } else {
+            mediaPlayer.reset();
+        }
+        if (initMedia(context)) {
+
+            if (!mediaPlayer.isPlaying()) {
+                try {
+                    mediaPlayer.prepare();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                mediaPlayer.start();
+            }
+        }
+    }
+
     public void stopDance() {
         if (mediaPlayer != null) {
             if (mediaPlayer.isPlaying()) {

@@ -181,4 +181,9 @@ public class VideoDetailView extends PresenterActivity<VideoDetailPresenter> imp
     public void doCallPhone(String phoneNumber) {
 
     }
+
+    @Override
+    public void doDance() {
+
+    }
 }

@@ -10,10 +10,10 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
         android:drawableLeft="@mipmap/ic_goback"
+        android:drawablePadding="5px"
         android:gravity="center"
         android:padding="10px"
         android:text="返回"
-        android:drawablePadding="5px"
         android:textColor="@color/color_commom_top"
         android:textSize="20sp" />
 
@@ -25,7 +25,7 @@
         android:layout_centerVertical="true"
         android:layout_marginTop="40px"
         android:gravity="center"
-        android:text="石景山支行挂号服务"
+        android:text="石景山支行取号服务"
         android:textColor="@color/color_main_function_item"
         android:textSize="28sp" />
 

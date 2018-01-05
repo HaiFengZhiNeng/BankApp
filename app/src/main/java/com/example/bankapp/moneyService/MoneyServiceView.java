@@ -17,10 +17,13 @@ import com.example.bankapp.adapter.ChatAdapter;
 import com.example.bankapp.adapter.MoneyCurrentApdater;
 import com.example.bankapp.adapter.MoneyIntroduceAdapter;
 import com.example.bankapp.adapter.MoneyIntroduceFinanceAdapter;
+import com.example.bankapp.adapter.MoneyIntroduceShowAdapter;
 import com.example.bankapp.animator.SlideInOutBottomItemAnimator;
 import com.example.bankapp.asr.MySpeech;
 import com.example.bankapp.base.adapter.BaseRecyclerAdapter;
+import com.example.bankapp.base.presenter.BasePresenter;
 import com.example.bankapp.base.view.PresenterActivity;
+import com.example.bankapp.common.enums.ComType;
 import com.example.bankapp.common.enums.SpecialType;
 import com.example.bankapp.database.manager.IntroduceFinanceManager;
 import com.example.bankapp.database.manager.IntroduceManager;
@@ -71,7 +74,7 @@ public class MoneyServiceView extends PresenterActivity<MoneyServicePresenter> i
     TextView tvTitle;
 
     //理财介绍Adapter
-    private MoneyIntroduceAdapter moneyIntroduceAdapter;
+    private MoneyIntroduceShowAdapter moneyIntroduceAdapter;
     private List<LocalMoneyService> moneyIntroduceList = new ArrayList<>();
 
     //理财与财经Adapter
@@ -117,8 +120,8 @@ public class MoneyServiceView extends PresenterActivity<MoneyServicePresenter> i
 
         mPresenter.setMySpeech(MySpeech.SPEECH_VOICE);
         IntentFilter filter = new IntentFilter();
-        filter.addAction(mPresenter.ACTION_OTHER_EXIT);
-        filter.addAction(mPresenter.ACTION_OTHER_RESULT);
+        filter.addAction(BasePresenter.ACTION_OTHER_EXIT);
+        filter.addAction(BasePresenter.ACTION_OTHER_RESULT);
         registerReceiver(businessReceiver, filter);
         // 一进入就说话 ： 可以通过关键词向我提问
 //        addSpeakAnswer(resFoFinal(R.array.manual_location_voice));
@@ -133,9 +136,9 @@ public class MoneyServiceView extends PresenterActivity<MoneyServicePresenter> i
     private BroadcastReceiver businessReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(mPresenter.ACTION_OTHER_EXIT)) {
+            if (intent.getAction().equals(BasePresenter.ACTION_OTHER_EXIT)) {
                 onExit();
-            } else if (intent.getAction().equals(mPresenter.ACTION_OTHER_RESULT)) {
+            } else if (intent.getAction().equals(BasePresenter.ACTION_OTHER_RESULT)) {
                 String text = intent.getStringExtra("result");
                 onVoiceResult(text);
             }
@@ -149,7 +152,7 @@ public class MoneyServiceView extends PresenterActivity<MoneyServicePresenter> i
         introduceManager = new IntroduceManager();
         introduceFinanceManager = new IntroduceFinanceManager();
         //理财介绍
-        moneyIntroduceAdapter = new MoneyIntroduceAdapter(this, moneyIntroduceList);
+        moneyIntroduceAdapter = new MoneyIntroduceShowAdapter(this, moneyIntroduceList);
         //理财与财经
         moneyIntroduceFinanceAdapter = new MoneyIntroduceFinanceAdapter(this, moneyVideoList);
         //活期理财
@@ -193,11 +196,17 @@ public class MoneyServiceView extends PresenterActivity<MoneyServicePresenter> i
     private void initData() {
         //理财介绍
         moneyIntroduceList = introduceManager.loadAll();
-        moneyIntroduceAdapter.refreshData(moneyIntroduceList);
+        if (moneyIntroduceList != null || moneyIntroduceList.size() > 0) {
+            isIntroduceVisibility(true);
+            moneyIntroduceAdapter.refreshData(moneyIntroduceList);
+        }
 
         // 理财与财经
         moneyVideoList = introduceFinanceManager.loadAll();
-        moneyIntroduceFinanceAdapter.refreshData(moneyVideoList);
+        if (moneyVideoList.size() > 0) {
+            isIntroduceFinanceVisibility(true);
+            moneyIntroduceFinanceAdapter.refreshData(moneyVideoList);
+        }
 
         //活期理财
         moneyCurrentApdater.addData(new MoneyCurrent("天天盈", "4.500%", "昨日年化收益率", "灵活存取", "1000元"));
@@ -283,11 +292,37 @@ public class MoneyServiceView extends PresenterActivity<MoneyServicePresenter> i
         List<LocalMoneyVideo> localVideosList = introduceFinanceManager.queryIntroduceByQuestion(result);//本地视频
         if (localVoiceList != null && localVoiceList.size() > 0) {// 属于本地语音
             LocalMoneyService localVoice = localVoiceList.get(new Random().nextInt(localVoiceList.size()));
-            if (localVoiceList.size() == 1) {
+            if (localVoiceList.size() == 1) {//模糊查询 符合当前条件的有几个 如果有一个直接读出答案，多则读出问题和答案
                 text = localVoice.getIntroduceAnswer();
             } else {
                 text = localVoice.getIntroduceQuestion() + "  \n" + localVoice.getIntroduceAnswer();
             }
+
+            if (localVoice.getIntroduceAction() != null) {
+            }
+
+            if (localVoice.getIntroduceAction() != null) {
+                if (localVoice.getIntroduceType().equals("本地语音")) {
+
+                    if (localVoice.getIntroduceActionData().equals("A50C80E1AA")) {//开始跳舞
+                        DanceUtils.getInstance().startDance(MoneyServiceView.this);
+                        mSerialPresenter.receiveMotion(ComType.A, localVoice.getIntroduceActionData());
+                        return;
+                    } else if (localVoice.getIntroduceActionData().equals("A50C80E2AA")) {//停止跳舞
+                        DanceUtils.getInstance().stopDance();
+                        //mSerialPresenter.receiveMotion(ComType.A, cmb.getActionData());
+                    }
+                    mSerialPresenter.receiveMotion(ComType.A, localVoice.getIntroduceActionData());
+                } else if (localVoice.getIntroduceType().equals("本地导航")) {
+                    mSerialPresenter.receiveMotion(ComType.C, localVoice.getIntroduceActionData());
+                }
+            }
+
+            if (localVoice.getIntroduceExpressionData() != null) {
+                //                    sendSecond(cmb.getExpressionData());
+                mSerialPresenter.receiveMotion(ComType.A, localVoice.getIntroduceExpressionData());
+            }
+
             doLocalChatScroll(result, text);
             addSpeakAnswer(text);
         } else if (localVideosList != null && localVideosList.size() > 0) {// 属于本地视频
@@ -315,6 +350,7 @@ public class MoneyServiceView extends PresenterActivity<MoneyServicePresenter> i
 
 
     // 默认进入 播放内容
+    @Override
     public String resFoFinal(int id) {
         String[] arrResult = MoneyServiceView.this.getResources().getStringArray(id);
         return arrResult[new Random().nextInt(arrResult.length)];
@@ -385,6 +421,11 @@ public class MoneyServiceView extends PresenterActivity<MoneyServicePresenter> i
 
     @Override
     public void doCallPhone(String phoneNumber) {
+
+    }
+
+    @Override
+    public void doDance() {
 
     }
 }

@@ -21,17 +21,17 @@ public class SpecialUtils {
     public static String[] speakJokeArray = {"笑话", "讲笑话", "讲一个笑话", "换一个笑话吧", "讲个段子", "讲个笑话", "段子"};
 
     //业务查询
-    public static String[] speakBusinessService = {"业务查询", ""};
+    public static String[] speakBusinessService = {"窗口导航", ""};
     //e缴费
     public static String[] speakCostService = {"缴费", "交费"};
-    //挂号服务
-    public static String[] speakRegisterService = {"挂号服务"};
+    //取号服务
+    public static String[] speakRegisterService = {"取号", "取号服务", "拿号"};
     //违章查询
     public static String[] speakIllegalrService = {"违章查询"};
     //身份认证
     public static String[] speakIdentityService = {"身份认证"};
     //理财产品
-    public static String[] speakMoneyService = {"理财产品"};
+    public static String[] speakMoneyService = {"理财产品", "理财"};
 
     public static String[] speakWakeupArray = {"你好芳芳"};
     public static String[] speakForwardArray = {"前进", "向前", "向前走"};
@@ -39,6 +39,8 @@ public class SpecialUtils {
     public static String[] speakTurnleftArray = {"左转", "向左转"};
     public static String[] speakTurnrightArray = {"右转", "向右转"};
     public static String[] speakExitArray = {"退出", "返回", "发挥", "推出", "闪回", "八回", "回"};
+
+    public static String[] dance = {"跳舞"};
 
     public static SpecialType doesExist(Activity activity, String speakTxt) {
         if (Arrays.asList(speakWakeupArray).contains(speakTxt)) {
@@ -74,6 +76,8 @@ public class SpecialUtils {
             return SpecialType.MoneyService;
         } else if (Arrays.asList(speakExitArray).contains(speakTxt)) {
             return SpecialType.Exit;
+        } else if (Arrays.asList(dance).contains(speakTxt)) {
+            return SpecialType.Dance;
         }
 //        if (Arrays.asList(speakLocalVoiceArray).contains(speakTxt)) {
 //        return SpecialType.LocalVoice;

@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">BankApp</string>
 
-    <string name="string_main_function_register">挂号服务</string>
+    <string name="string_main_function_register">取号服务</string>
     <string name="string_main_function_illegalr">违章查询</string>
-    <string name="string_main_function_cost">e缴费</string>
-    <string name="string_main_function_business">业务查询</string>
+    <string name="string_main_function_cost">缴费</string>
+    <string name="string_main_function_business">窗口导航</string>
     <string name="string_main_function_identity">身份认证</string>
     <string name="string_main_function_money">理财产品</string>
 
@@ -80,6 +80,22 @@
     <!-- 人脸识别部分 -->
     <string name="string_face_add">人脸添加</string>
     <string name="string_face_distinguish">人脸识别</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- 添加本地信息 -->
+    <string name="set_action">执行动作:</string>
+    <string name="set_expression">面部表情:</string>
+    <string name="set_datatype">类型:</string>
+    <!-- 违章信息 -->
+    <string name="string_traffic_name">姓名:</string>
+    <string name="string_traffic_sex">性别:</string>
+    <string name="string_traffic_nation">民族:</string>
+    <string name="string_traffic_birthday">出生日期:</string>
+    <string name="string_traffic_address">地址:</string>
+    <string name="string_traffic_data">有效期限:</string>
+    <string name="string_traffic_office">签发机关:</string>
+    <string name="string_traffic_finger">身份证无指纹</string>
+    <string name="string_traffic_idcard">身份证号码：</string>
+    <string name="string_traffic_record_car">车辆信息</string>
+    <string name="string_traffic_record_info">违章</string>
+    <string name="string_traffic_record_money">罚款</string>
+    <string name="string_traffic_record_data">扣分</string>
 </resources>

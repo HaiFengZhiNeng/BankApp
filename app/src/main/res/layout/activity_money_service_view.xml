@@ -41,7 +41,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/string_money_introduce"
                     android:textColor="@color/color_main_function_item"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <ImageView
                     android:id="@+id/iv_introduce"
@@ -56,12 +56,14 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
                 android:visibility="visible">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_introduce"
                     android:layout_width="match_parent"
-                    android:layout_height="208px" />
+                    android:layout_height="208px"
+                    android:paddingLeft="5dp" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -92,7 +94,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/string_money_introduce_finance"
                     android:textColor="@color/color_main_function_item"
-                    android:textSize="16sp" />
+                    android:textSize="20sp" />
 
                 <ImageView
                     android:id="@+id/iv_introduceFinance"
@@ -100,14 +102,15 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:paddingLeft="15dp"
-                    android:src="@mipmap/ic_icon_down" />
+                    android:src="@mipmap/ic_icon_down_right" />
 
             </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_introduceFinance"
                 android:layout_width="match_parent"
-                android:layout_height="140px" />
+                android:layout_height="140px"
+                android:visibility="gone" />
         </LinearLayout>
 
         <View

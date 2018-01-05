@@ -444,4 +444,9 @@ public class AddPhotoView extends PresenterActivity<AddPhotoPresenter> implement
     public void doCallPhone(String phoneNumber) {
 
     }
+
+    @Override
+    public void doDance() {
+
+    }
 }

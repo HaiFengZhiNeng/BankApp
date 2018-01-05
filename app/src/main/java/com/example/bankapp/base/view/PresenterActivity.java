@@ -7,21 +7,29 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 
 import com.example.bankapp.BankApplication;
 import com.example.bankapp.R;
+import com.example.bankapp.base.config.Constant;
 import com.example.bankapp.base.handler.BaseHandler;
 import com.example.bankapp.base.presenter.BasePresenter;
 import com.example.bankapp.common.enums.ComType;
 import com.example.bankapp.common.enums.SpecialType;
+import com.example.bankapp.common.instance.SpeakTts;
 import com.example.bankapp.serialport.ISerialPortView;
 import com.example.bankapp.serialport.SerialPresenter;
 import com.example.bankapp.service.UDPAcceptReceiver;
 import com.example.bankapp.service.UsbService;
+import com.example.bankapp.splash.SingleLogin;
 import com.example.bankapp.util.DanceUtils;
+import com.example.bankapp.util.L;
 import com.example.bankapp.util.MediaPlayerUtil;
+import com.example.bankapp.util.PhoneUtil;
+import com.example.bankapp.util.ReceiveMessage;
+import com.example.bankapp.util.SendToControll;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoImpl;
 import com.jph.takephoto.model.InvokeParam;
@@ -30,12 +38,20 @@ import com.jph.takephoto.model.TResult;
 import com.jph.takephoto.permission.InvokeListener;
 import com.jph.takephoto.permission.PermissionManager;
 import com.jph.takephoto.permission.TakePhotoInvocationHandler;
+import com.yuntongxun.ecsdk.ECMessage;
+import com.yuntongxun.ecsdk.im.ECTextMessageBody;
+
+import org.json.JSONObject;
 
 import java.util.Random;
 
+import static com.example.bankapp.base.presenter.BasePresenter.isSport;
+import static com.example.bankapp.base.presenter.BasePresenter.isTalking;
+import static com.example.bankapp.base.presenter.BasePresenter.isVoice;
+
 
 public abstract class PresenterActivity<T extends BasePresenter> extends BaseActivity implements TakePhoto.TakeResultListener, InvokeListener, ISerialPortView.ISerialView, BaseHandler.HandleMessage,
-        UDPAcceptReceiver.UDPAcceptInterface {
+        ReceiveMessage {
     protected T mPresenter;
     private static final String TAG = PresenterActivity.class.getName();
     private TakePhoto takePhoto;
@@ -58,6 +74,8 @@ public abstract class PresenterActivity<T extends BasePresenter> extends BaseAct
         getTakePhoto().onCreate(savedInstanceState);
         mPresenter.onCreate(savedInstanceState);
         mSerialPresenter = new SerialPresenter(this);
+        Constant.IP = PhoneUtil.getWifiIP(this);
+        SingleLogin.getInstance(this, "").setReceive(this);
     }
 
     public abstract T createPresenter();
@@ -78,9 +96,9 @@ public abstract class PresenterActivity<T extends BasePresenter> extends BaseAct
         super.onResume();
         onResumeVoice();
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(UsbService.ACTION_USB_RECEIVER);
-        this.registerReceiver(this.usbReceiver, filter);
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(UsbService.ACTION_USB_RECEIVER);
+//        this.registerReceiver(this.usbReceiver, filter);
         //开启语音
         mPresenter.doVoiceSwitch(true);
         mPresenter.onResume();
@@ -105,7 +123,6 @@ public abstract class PresenterActivity<T extends BasePresenter> extends BaseAct
         mPresenter.stopTts();
         mPresenter.stopRecognizerListener();
         mPresenter.stopHandler();
-
         MediaPlayerUtil.getInstance().stopMusic();
         DanceUtils.getInstance().stopDance();
         onPauseReceiver();
@@ -116,6 +133,11 @@ public abstract class PresenterActivity<T extends BasePresenter> extends BaseAct
     @Override
     protected void onDestroy() {
         mPresenter.onDestroy();
+        mSerialPresenter.closeComPort();
+        //关闭语音等其他操作
+        mPresenter.stopTts();
+        mPresenter.stopRecognizerListener();
+        mPresenter.stopHandler();
         super.onDestroy();
     }
 
@@ -375,16 +397,9 @@ public abstract class PresenterActivity<T extends BasePresenter> extends BaseAct
         }
     };
 
-    //UDP
-    @Override
-    public void UDPinitFinsih(String content) {
-        showToast(content);
-    }
-
-    @Override
-    public void UDPAcceptMessage(String content) {
-        showToast(content);
-        mSerialPresenter.receiveMotion(ComType.A, content);
+    //控制运动
+    public void ReceiveMotion(ComType type, String motion) {
+        mSerialPresenter.receiveMotion(type, motion);
     }
 
     //位移 运动
@@ -410,4 +425,107 @@ public abstract class PresenterActivity<T extends BasePresenter> extends BaseAct
         }
     }
 
+    @Override
+    public void OnReceivedMessage(ECMessage msg) {
+        L.e("basePresenter", "收到了" + msg.getBody() + "");
+        /**
+         *
+         * 根据自定义的类型 去做相对应的操作
+         * */
+        ECTextMessageBody stateBody = (ECTextMessageBody) msg.getBody();
+        if (msg.getUserData().equals("Motion")) {
+            String motion = stateBody.getMessage();
+
+            ReceiveMotion(ComType.A, motion);
+            Log.i("WWDZ", "ReceiveMotion: " + msg.getBody().toString());
+        } else if (msg.getUserData().equals("SmartChat")) {//发音人
+
+            String state = stateBody.getMessage();
+//            SharedPreferences.Editor editor = mSharedPreferences.edit();
+            SpeakTts.getInstance().setSpokesman(state);
+            SpeakTts.getInstance().initTts();
+//            editor.putString("iat_language_talker", talker);
+//            if (talker.equals("henry") || talker.equals("aiscatherine") || talker.equals("aisjohn") || talker.equals("vimary") || talker.equals("aistom")) {//听到英文翻译成中文
+//                editor.putString("iat_language_preference", "en_us");
+//            } else if (talker.equals("dalong") || talker.equals("xiaomei")) {//粤语
+//                editor.putString("iat_language_preference", "cantonese");
+//            } else {
+//                editor.putString("iat_language_preference", "zh_cn");
+//            }
+//
+//            editor.commit();
+//            mPresenter.initIat();
+//            mPresenter.initTts();
+
+        } else if (msg.getUserData().equals("text")) {//文本
+            ReceiveChat(msg);
+        } else if (msg.getUserData().equals("AutoAction")) {//自由运动开关
+            //自由运动
+
+            ReceiveChat(msg);
+        } else if (msg.getUserData().equals("VoiceSwitch")) {//语音开关
+            //自由运动
+            String state = stateBody.getMessage();
+            if ("语音开".equals(state)) {
+                isVoice = true;
+                mPresenter.judgeState();
+            } else {
+                isVoice = false;
+            }
+        } else if (msg.getUserData().equals("version")) {
+//            int version = Integer.valueOf(stateBody.getMessage());// 控制端发过来的版本
+//            int currentVersion = PreferencesUtils.getInt(this, "LocalVoice");// 本地版本
+//            if (version < currentVersion) {// 控制端小于机器人端
+//                List<UserInfo> userInfos = UserDao.getInstance().queryUserByType("Data");
+//                if (userInfos != null && userInfos.size() > 0) {
+//                    String voiceBean = GsonUtil.GsonString(userInfos);
+//                    SendToControll sendToControll = new SendToControll();
+//                    sendToControll.SendControll(currentVersion + "", "version");
+//                    boolean isSave = FileUtil.saveFile(voiceBean, BitmapUtils.projectPath + "localVoice.txt");
+//                    if (isSave) {
+//                        sendToControll.SendLocal(BitmapUtils.projectPath + "localVoice.txt", "localVoiceFile");
+//                    }
+//                } else {
+//                    showToast("本地沒有語音");
+//                }
+//            }
+
+        } else if (msg.getUserData().equals("IP")) {
+            String ip = stateBody.getMessage();
+            Log.e(TAG, "收到IP");
+            ReceiveIP(ip);
+        }
+    }
+
+    //接收消息
+    private void ReceiveChat(ECMessage msg) {
+        ECTextMessageBody stateBody = (ECTextMessageBody) msg.getBody();
+        String state = stateBody.getMessage();
+        L.e("GG", state + "");
+        if (isTalking) {
+            mPresenter.doAnswer(state);
+            refHomePage("", state);
+        }
+    }
+
+    //获取 IP
+    public void ReceiveIP(String ip) {
+        Log.e(TAG, "ReceiveMotion_ip: " + ip);
+        Constant.CONNECT_IP = ip;
+
+        if (Constant.IP != null && Constant.PORT > 0) {
+            try {
+                JSONObject object = new JSONObject();
+                object.put("robotIp", Constant.IP);
+                object.put("robotPort", Constant.PORT);
+                SendToControll send = new SendToControll();
+                send.SendControll(object.toString(), "IP");
+//                    Print.e("发送: " + object.toString());
+//                    mChatPresenter.sendCustomMessage(robotBean);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 }

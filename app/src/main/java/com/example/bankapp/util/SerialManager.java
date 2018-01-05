@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.example.bankapp.listener.DataReceivedListener;
 import com.example.bankapp.modle.ComBean;
 import com.example.bankapp.modle.SerialEntity;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -179,21 +180,22 @@ public class SerialManager {
         if (mSerialList != null && mSerialList.size() > 0) {
             for (int i = 0; i < mSerialList.size(); i++) {
                 SerialEntity serialEntity = mSerialList.get(i);
+                // 1 0
                 if (serialEntity.getPort().equals(control.getPort())) {
 
-                    if (control.getBaudRate() == 57600) {
+                    if (control.getBaudRate() == 57600) {// 导航
                         try {
                             serialEntity.getOutputStream().write(sHex.getBytes());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    } else if(control.getBaudRate() == 115200){
+                    } else if (control.getBaudRate() == 115200) {// 麦克风
                         try {
                             serialEntity.getOutputStream().write(sHex.getBytes());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }else {
+                    } else {// 动作
                         byte[] bOutArray = HexUtils.HexToByteArr(sHex);
                         try {
                             serialEntity.getOutputStream().write(bOutArray);

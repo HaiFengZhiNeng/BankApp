@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10px">
+
+    <TextView
+        android:id="@+id/tv_trafficRecordCar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/string_traffic_record_car"
+        android:textColor="@color/color_mian_news"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_trafficRecordInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/string_traffic_record_info"
+        android:textColor="@color/color_mian_news"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_trafficRecordMoney"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/string_traffic_record_money"
+        android:textColor="@color/color_mian_news"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_trafficRecordData"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/string_traffic_record_data"
+        android:textColor="@color/color_mian_news"
+        android:textSize="16sp" />
+
+</LinearLayout>

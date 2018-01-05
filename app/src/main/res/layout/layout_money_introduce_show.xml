@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="15px"
+    android:paddingLeft="15dp"
+    android:paddingRight="15px"
+    android:paddingTop="15px">
+
+    <TextView
+        android:id="@+id/tv_moneyIntroduceQuestion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:lines="1"
+        android:textColor="@color/color_commom_top"
+        android:textSize="16sp" />
+
+</LinearLayout>

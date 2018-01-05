@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.bankapp.R;
 import com.example.bankapp.asr.MySpeech;
+import com.example.bankapp.base.presenter.BasePresenter;
 import com.example.bankapp.base.view.PresenterActivity;
 import com.example.bankapp.common.enums.SpecialType;
 import com.example.bankapp.distinguish.addPhoto.AddPhotoView;
@@ -129,11 +130,11 @@ public class FaceDistinguishView extends PresenterActivity<FaceDistinguishPresen
 //        mUdpAcceptReceiver = new UDPAcceptReceiver(this);
 //        IntentFilter intentFilter = new IntentFilter(Constants.UDP_ACCEPT_ACTION);
 //        mLbmManager.registerReceiver(mUdpAcceptReceiver, intentFilter);
-        mPresenter.setMySpeech(MySpeech.SPEECH_NULL);
+        mPresenter.setMySpeech(MySpeech.SPEECH_EXIT);
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(mPresenter.ACTION_MAIN_SPECIATYPE);
-        intentFilter.addAction(mPresenter.ACTION_MAIN_SHOWTEXT);
-        intentFilter.addAction(mPresenter.ACTION_AIUI_EXIT);
+        intentFilter.addAction(BasePresenter.ACTION_MAIN_SPECIATYPE);
+        intentFilter.addAction(BasePresenter.ACTION_MAIN_SHOWTEXT);
+        intentFilter.addAction(BasePresenter.ACTION_OTHER_FINISH);
         registerReceiver(handleReceiver, intentFilter);
     }
 
@@ -373,7 +374,7 @@ public class FaceDistinguishView extends PresenterActivity<FaceDistinguishPresen
     private BroadcastReceiver handleReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(mPresenter.ACTION_AIUI_EXIT)) {
+            if (intent.getAction().equals(BasePresenter.ACTION_OTHER_FINISH)) {
                 onExit();
             }
         }
@@ -443,13 +444,15 @@ public class FaceDistinguishView extends PresenterActivity<FaceDistinguishPresen
     }
 
     @Override
+    public void doDance() {
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.tv_title)
-    public void onViewClicked() {
-    }
 }

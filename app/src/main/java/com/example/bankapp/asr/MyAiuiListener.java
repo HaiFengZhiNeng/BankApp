@@ -326,7 +326,7 @@ public class MyAiuiListener implements AIUIListener {
                     } else if (service.equals("openQA")) {
                         aiListener.onDoAnswer(question, text);
                     } else {
-                        SaveUtils.getInstance().appendJson(question);
+//                        SaveUtils.getInstance().appendJson(question);
                         aiListener.onDoAnswer(question, "等待添加！！！");
                     }
                 } catch (Throwable e) {
@@ -391,7 +391,7 @@ public class MyAiuiListener implements AIUIListener {
     }
 
     private void noResult(String question) {
-        SaveUtils.getInstance().appendJson(question);
+//        SaveUtils.getInstance().appendJson(question);
         noResultCount++;
         if (noResultCount > 5) {
             noResultCount = 0;
@@ -413,8 +413,9 @@ public class MyAiuiListener implements AIUIListener {
             }
             aiListener.onNoAnswer(question, finalText, otherText);
         } else {
-            String finalText = resFoFinal(R.array.no_result);
-            aiListener.onDoAnswer(question, finalText);
+            // 当听不懂的时候 传入的参数为空 重新进入监听状态
+//            String finalText = resFoFinal(R.array.no_result);
+            aiListener.onDoAnswer(question, "");
         }
     }
 

@@ -39,6 +39,7 @@ public interface UiView {
 
     void refHomePage(String question, EnglishEveryday englishEveryday);
 
-
     void doCallPhone(String phoneNumber);
+
+    void doDance();
 }

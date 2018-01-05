@@ -27,7 +27,7 @@ public class MoneyIntroduceFinanceAdapter extends BaseAdapter<LocalMoneyVideo> {
 
     @Override
     protected void convert(BaseRecyclerViewHolder viewHolder, LocalMoneyVideo item, int pos) {
-        viewHolder.getTextView(R.id.tv_moneyIntroduceItem).setText(item.getVideoName());
+        viewHolder.getTextView(R.id.tv_moneyIntroduceFiance).setText(item.getVideoName());
     }
 
 }

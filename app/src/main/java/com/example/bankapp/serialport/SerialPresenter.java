@@ -62,7 +62,8 @@ public class SerialPresenter extends ISerialPortView implements DataReceivedList
         comA = new SerialEntity();
         comA.setPort("/dev/" + devName);
         comA.setBaudRate(9600);
-        //  openComPort(comA);
+        // 打开串口
+        openComPort(comA);
 
         comB = new SerialEntity();
         comB.setPort("/dev/" + voiceName);
@@ -155,12 +156,12 @@ public class SerialPresenter extends ISerialPortView implements DataReceivedList
     @Override
     public void receiveMotion(ComType comType, String motion) {
         if (comType == ComType.A) {
-            //sendPortData(comA, motion);
-            Log.e("gg", " usb 发送广播 " + motion);
-            Intent intent = new Intent();
-            intent.setAction(UsbService.ACTION_WRITW_DATA);
-            intent.putExtra("motion", motion);
-            mSerialView.getContext().sendBroadcast(intent);
+            sendPortData(comA, motion);
+//            Log.e("gg", " usb 发送广播 " + motion);
+//            Intent intent = new Intent();
+//            intent.setAction(UsbService.ACTION_WRITW_DATA);
+//            intent.putExtra("motion", motion);
+//            mSerialView.getContext().sendBroadcast(intent);
 //            mSerialView.walkUSBChannel(motion);
         } else if (comType == ComType.B) {
             sendPortData(comB, motion);
@@ -177,7 +178,6 @@ public class SerialPresenter extends ISerialPortView implements DataReceivedList
             sMsg.append(HexUtils.hexStringToString(HexUtils.byte2HexStr(comRecData.bRec)));
             Log.e("gg", "sMsg : " + sMsg);
             if (sMsg.toString().contains("UP!")) {
-
                 sendDelayed();
                 if (sMsg.toString().contains("##### IFLYTEK")) {
 

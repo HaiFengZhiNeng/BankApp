@@ -46,6 +46,7 @@ import com.example.bankapp.util.FucUtil;
 import com.example.bankapp.util.MediaPlayerUtil;
 import com.example.bankapp.util.PreferencesUtils;
 import com.example.bankapp.util.PromptManager;
+import com.example.bankapp.util.ReceiveMessage;
 import com.example.bankapp.util.SpecialUtils;
 import com.example.bankapp.util.tele.TelNumMatch;
 import com.example.bankapp.util.tele.TelePhoneUtils;
@@ -58,11 +59,13 @@ import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.util.ResourceUtil;
 import com.iflytek.sunflower.FlowerCollector;
+import com.yuntongxun.ecsdk.ECMessage;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Random;
 
+import static com.example.bankapp.asr.MySpeech.SPEECH_EXIT;
 import static com.example.bankapp.common.Constants.mySpeechType;
 
 /**
@@ -79,6 +82,13 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
     public static final String ACTION_AIUI_EXIT = "com.example.bankapp.finish";
     public static final String ACTION_OTHER_EXIT = "com.example.bankapp.location.finish";
     public static final String ACTION_OTHER_RESULT = "com.example.bankapp.location";
+    public static final String ACTION_OTHER_FINISH = "com.example.bankapp.location";
+
+    //是否正在说话
+
+    public static boolean isTalking = true;
+    // 是否可以运动
+    public static boolean isSport;
 
     //语音听写
     private SpeechRecognizer mIat;
@@ -96,12 +106,13 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
 
     private Handler mHandler = new Handler();
 
-    private boolean isTalking;
 
     private int ret = 0;
     //拨打电话
     private TeleType teleType;
     private String phoneNumber;
+
+    public static boolean isVoice = true;//是否正在说话
 
     public String TAG = this.getClass().getSimpleName();
     private BaseHandler mBaseHandler;
@@ -136,12 +147,15 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
      * 同 Activity onResume
      */
     public void onResume() {
+        isSport = true;
     }
 
     /**
      * 同 Activity onPause
      */
     public void onPause() {
+
+        isSport = false;
     }
 
     /**
@@ -512,8 +526,8 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
             if (isBuild) {
                 isBuild = PreferencesUtils.getBoolean(mView.getContext(), Constants.IAT_LOCAL_BUILD, false);
             }
-            content = new String(FucUtil.readFile(mView.getContext(), "abnf.abnf", "utf-8"));
-            type = "abnf";
+//            content = new String(FucUtil.readFile(mView.getContext(), "bank.abnf", "utf-8"));
+//            type = "abnf";
         } else if (engineType.equals(SpeechConstant.TYPE_LOCAL)) {
             // 设置本地识别资源
             mIat.setParameter(ResourceUtil.ASR_RES_PATH, getResAsrPath());
@@ -583,7 +597,10 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
 
     //开始语音监听
     public void judgeState() {
-        startRecognizerListener();
+        isTalking = true;
+        if (isVoice) {//为true 可以进行监听说话
+            startRecognizerListener();
+        }
     }
 
     //设置监听的类型
@@ -684,6 +701,7 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
     // 语音合成完毕
     @Override
     public void onCompleted() {
+
         mHandler.postDelayed(runnable, 400);
     }
 
@@ -708,14 +726,14 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
 
     @Override
     public void onSpeakBegin() {
-        isTalking = true;
+        isTalking = false;
         stopRecognizerListener();
     }
 
     //普通问答
     @Override
     public void onDoAnswer(String question, String finalText) {
-        if (finalText == null) {
+        if ("".equals(finalText) || finalText == null) {
             onCompleted();
         } else {
             mView.doAiuiAnwer(finalText);
@@ -1043,6 +1061,8 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
 //                startTextNlp("笑话");
                 stopRecognizerListener();
                 mView.special(result, SpecialType.Joke);
+            } else if (specialType == SpecialType.Dance) {
+                mView.doDance();
             } else if (specialType == SpecialType.WakeUp) {
                 doAnswer(resFoFinal(R.array.wake_up));
             } else if (specialType == SpecialType.Forward || specialType == SpecialType.Backoff ||
@@ -1076,6 +1096,14 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
                 Intent intent = new Intent(ACTION_OTHER_RESULT);
                 intent.putExtra("result", voice_result);
                 ((Activity) mView).sendBroadcast(intent);
+            }
+        } else if (Constants.mySpeechType.equals(SPEECH_EXIT)) {
+            SpecialType specialType = SpecialUtils.doesExist(((Activity) mView), result);
+            if (specialType == SpecialType.Exit) {
+                Intent intent = new Intent(ACTION_OTHER_FINISH);
+                ((Activity) mView).sendBroadcast(intent);
+            } else {
+                startRecognizerListener();
             }
         }
     }
@@ -1127,4 +1155,34 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
     private String[] resArray(int resId) {
         return mView.getContext().getResources().getStringArray(resId);
     }
+
+    //上传热词
+    public void uploadUserwords() {
+        String contents = FucUtil.readFile(BankApplication.getInstance(), "userwords", "utf-8");
+
+        // 指定引擎类型
+        mIat.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
+        // 置编码类型
+        mIat.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");
+        ret = mIat.updateLexicon("userword", contents, mLexiconListener);
+        if (ret != ErrorCode.SUCCESS)
+
+            Log.e("WWDZ", "上传热词失败,错误码：");
+    }
+
+    /**
+     * 上传联系人/词表监听器。
+     */
+    private LexiconListener mLexiconListener = new LexiconListener() {
+
+        @Override
+        public void onLexiconUpdated(String lexiconId, SpeechError error) {
+            if (error != null) {
+                Log.e("WWDZ", "上传热词error：" + error.toString());
+
+            } else {
+                Log.e("WWDZ", "上传热词成功");
+            }
+        }
+    };
 }

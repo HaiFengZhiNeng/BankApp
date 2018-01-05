@@ -26,38 +26,54 @@
                 app:rollviewpager_play_delay="3000" />
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_news"
+        <RelativeLayout
+            android:id="@+id/rl_news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/rl_rollView"
-            android:layout_marginLeft="30px"
-            android:layout_marginTop="20px"
-            android:orientation="horizontal">
+            android:layout_below="@id/rl_rollView">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="30px"
+                android:layout_marginTop="20px"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_main_news" />
+
+                <View
+                    style="@style/style_main_line_vertical"
+                    android:layout_marginLeft="20px"
+                    android:layout_marginRight="20px" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="“黑色星期五”折射消费升级趋势"
+                    android:textColor="@color/color_mian_news"
+                    android:textSize="20sp" />
+            </LinearLayout>
 
             <ImageView
+                android:id="@+id/iv_qrcode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_main_news" />
+                android:layout_alignParentRight="true"
+                android:padding="10dp"
+                android:src="@mipmap/ic_qrcode" />
 
-            <View
-                style="@style/style_main_line_vertical"
-                android:layout_marginLeft="20px"
-                android:layout_marginRight="20px" />
+        </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="“黑色星期五”折射消费升级趋势"
-                android:textColor="@color/color_mian_news"
-                android:textSize="20sp" />
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_function"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ll_news"
+            android:layout_below="@id/rl_news"
             android:layout_marginLeft="60px"
             android:layout_marginRight="60px"
             android:layout_marginTop="50px"

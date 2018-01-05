@@ -212,4 +212,9 @@ public class AddDataView extends PresenterActivity<AddDataPresenter> implements 
     public void doCallPhone(String phoneNumber) {
 
     }
+
+    @Override
+    public void doDance() {
+
+    }
 }

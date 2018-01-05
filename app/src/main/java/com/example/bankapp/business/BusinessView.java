@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.bankapp.R;
 import com.example.bankapp.asr.MySpeech;
+import com.example.bankapp.base.presenter.BasePresenter;
 import com.example.bankapp.base.view.PresenterActivity;
 import com.example.bankapp.common.enums.SpecialType;
 import com.example.bankapp.modle.voice.Cookbook;
@@ -100,6 +101,11 @@ public class BusinessView extends PresenterActivity<BusinessPresenter> implement
     }
 
     @Override
+    public void doDance() {
+
+    }
+
+    @Override
     public BusinessPresenter createPresenter() {
         return new BusinessPresenter(this);
     }
@@ -107,9 +113,9 @@ public class BusinessView extends PresenterActivity<BusinessPresenter> implement
     @Override
     public void onResumeVoice() {
 
-        mPresenter.setMySpeech(MySpeech.SPEECH_AIUI);
+        mPresenter.setMySpeech(MySpeech.SPEECH_EXIT);
         IntentFilter filter = new IntentFilter();
-        filter.addAction(mPresenter.ACTION_AIUI_EXIT);
+        filter.addAction(BasePresenter.ACTION_OTHER_FINISH);
         registerReceiver(businessReceiver, filter);
 
     }
@@ -137,7 +143,7 @@ public class BusinessView extends PresenterActivity<BusinessPresenter> implement
     private BroadcastReceiver businessReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(mPresenter.ACTION_AIUI_EXIT)) {
+            if (intent.getAction().equals(BasePresenter.ACTION_OTHER_FINISH)) {
                 onExit();
             }
         }

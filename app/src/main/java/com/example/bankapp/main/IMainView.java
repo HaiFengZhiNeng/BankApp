@@ -31,8 +31,7 @@ public interface IMainView extends UiView {
 
     void refHomePage(String question, EnglishEveryday englishEveryday);
 
-
     void doCallPhone(String phoneNumber);
 
-
+    void initECSuccess(boolean isSuccess);
 }

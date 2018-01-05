@@ -150,6 +150,11 @@ public class PerfectInforView extends PresenterActivity<PerfectInforPresenter> i
 
     }
 
+    @Override
+    public void doDance() {
+
+    }
+
     @OnClick({R.id.tv_goBack, R.id.tv_complete})
     public void onViewClicked(View view) {
         switch (view.getId()) {

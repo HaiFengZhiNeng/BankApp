@@ -167,6 +167,11 @@ public class RegisterServiceView extends PresenterActivity<RegisterServicePresen
     }
 
     @Override
+    public void doDance() {
+
+    }
+
+    @Override
     protected void onViewCreated() {
         super.onViewCreated();
         initView();

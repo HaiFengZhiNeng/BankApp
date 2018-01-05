@@ -1,20 +1,26 @@
 package com.example.bankapp.main;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,10 +31,13 @@ import com.example.bankapp.addLocalData.AddDataView;
 import com.example.bankapp.animator.SlideInOutBottomItemAnimator;
 import com.example.bankapp.asr.MySpeech;
 import com.example.bankapp.base.handler.BaseHandler;
-import com.example.bankapp.base.view.BaseActivity;
+import com.example.bankapp.base.presenter.BasePresenter;
 import com.example.bankapp.base.view.PresenterActivity;
 import com.example.bankapp.business.BusinessView;
+import com.example.bankapp.common.Constants;
+import com.example.bankapp.common.enums.ComType;
 import com.example.bankapp.common.enums.SpecialType;
+import com.example.bankapp.common.instance.SpeakTts;
 import com.example.bankapp.database.manager.IntroduceManager;
 import com.example.bankapp.distinguish.faceDistinguish.FaceDistinguishView;
 import com.example.bankapp.modle.Chat;
@@ -39,12 +48,25 @@ import com.example.bankapp.modle.voice.Poetry;
 import com.example.bankapp.modle.voice.radio.Radio;
 import com.example.bankapp.moneyService.MoneyServiceView;
 import com.example.bankapp.register.RegisterView;
+import com.example.bankapp.service.UDPAcceptReceiver;
+import com.example.bankapp.service.UdpService;
+import com.example.bankapp.splash.SingleLogin;
+import com.example.bankapp.splash.SplashView;
+import com.example.bankapp.traffic.TrafficView;
+import com.example.bankapp.util.BitmapUtils;
 import com.example.bankapp.util.DanceUtils;
-import com.example.bankapp.util.MediaPlayerUtil;
+import com.example.bankapp.util.FileUtil;
+import com.example.bankapp.util.GsonUtil;
+import com.example.bankapp.util.L;
 import com.example.bankapp.util.PermissionsChecker;
+import com.example.bankapp.util.PreferencesUtils;
+import com.example.bankapp.util.ReceiveMessage;
 import com.example.bankapp.view.ChatLinearLayoutManager;
+import com.example.bankapp.view.FindQRCodeDialog;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.hintview.ColorPointHintView;
+import com.yuntongxun.ecsdk.ECMessage;
+import com.yuntongxun.ecsdk.im.ECTextMessageBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,9 +75,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainView extends PresenterActivity<MainPresenter> implements IMainView, BaseHandler.HandleMessage {
+import static com.example.bankapp.base.presenter.BasePresenter.isSport;
+import static com.example.bankapp.base.presenter.BasePresenter.isTalking;
+import static com.example.bankapp.base.presenter.BasePresenter.isVoice;
+
+public class MainView extends PresenterActivity<MainPresenter> implements UDPAcceptReceiver.UDPAcceptInterface, IMainView {
 
     @BindView(R.id.tv_registerService)
     TextView tvRegisterService;//挂号服务
@@ -73,26 +100,21 @@ public class MainView extends PresenterActivity<MainPresenter> implements IMainV
     RecyclerView rvMainService;//对话框
     @BindView(R.id.roll_view)
     RollPagerView rollView;    //轮播图
+    @BindView(R.id.iv_qrcode)
+    ImageView ivQrcode;
+
+    //二维码
+    private FindQRCodeDialog findQRCodeDialog;
 
     //对话框
     private ChatAdapter mChatAdapter;
     private List<Chat> mChatList = new ArrayList<>();
 
-    //权限列表
-    static final String[] PERMISSIONS = new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.READ_SMS, Manifest.permission.READ_CONTACTS, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA
-    };
-    //权限
-    private PermissionsChecker mChecker;
-    private static final int PERMISSION_REQUEST_CODE = 0; // 系统权限管理页面的参数
-    private static final String PACKAGE_URL_SCHEME = "package:"; // 方案
-
-    //handler
-    private static final int REFRESH_COMPLETE = 0X153;
-    private Handler handler = new BaseHandler<>(MainView.this);
-
     //本地语音Manager
     private IntroduceManager introduceManager;
+    //udp
+    private UDPAcceptReceiver mUdpAcceptReceiver;
+    private LocalBroadcastManager mLbmManager;
 
     @Override
     protected int getContentViewResource() {
@@ -113,22 +135,17 @@ public class MainView extends PresenterActivity<MainPresenter> implements IMainV
     @Override
     protected void onViewCreated() {
         super.onViewCreated();
-        initPermission();
+        initView();
+
     }
 
-    private void initPermission() {
-        mChecker = new PermissionsChecker(this);
-        if (mChecker.lacksPermissions(PERMISSIONS)) {
-
-            if (mChecker.lacksPermissions(PERMISSIONS)) {
-                //请求权限
-                ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_REQUEST_CODE);
-
-            } else {
-                initView();// 全部权限都已获取
-            }
+    // 初始化云通讯完成
+    @Override
+    public void initECSuccess(boolean isSuccess) {
+        if (isSuccess) {
+//            showToast("控制端连接成功");
         } else {
-            initView();
+//            showToast("控制端连接失败");
         }
     }
 
@@ -151,24 +168,34 @@ public class MainView extends PresenterActivity<MainPresenter> implements IMainV
         introduceManager = new IntroduceManager();
         //初始化数据
         initData();
+        // 初始化UDP
+        initUdp();
     }
+
 
     private void initData() {
         mPresenter.addLocalData(introduceManager);
         mChatAdapter.addItem(new Chat("您好，很高兴为您服务，请问有什么可以帮您？", 0));
         mPresenter.doAnswer("您好，很高兴为您服务，请问有什么可以帮您？");
+
         doInfoScroll();
     }
 
-    @OnClick({R.id.tv_registerService, R.id.tv_illegalrService, R.id.tv_costService, R.id.tv_businessService, R.id.tv_identityService, R.id.tv_moneyService})
+    private void initUdp() {
+        //开启UDP Service
+        startService(new Intent(MainView.this, UdpService.class));
+        mLbmManager = LocalBroadcastManager.getInstance(this);
+        startService(new Intent(this, UdpService.class));
+    }
+
+    @OnClick({R.id.tv_registerService, R.id.tv_illegalrService, R.id.tv_costService, R.id.tv_businessService, R.id.tv_identityService, R.id.tv_moneyService, R.id.iv_qrcode})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_registerService://挂号服务
                 startActivity(RegisterView.class);
                 break;
             case R.id.tv_illegalrService://违章查询
-                showToast("暂未开通此功能");
-                mPresenter.doAnswer("暂未开通此功能");
+                startActivity(TrafficView.class);
                 break;
             case R.id.tv_costService://e缴费
                 startActivity(AddDataView.class);
@@ -184,36 +211,8 @@ public class MainView extends PresenterActivity<MainPresenter> implements IMainV
             case R.id.tv_moneyService://理财产品
                 startActivity(MoneyServiceView.class);
                 break;
-        }
-    }
-
-
-    //请求权限结果
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PERMISSION_REQUEST_CODE && hasAllPermissionsGranted(grantResults)) {
-            initView();
-        } else {
-            handler.sendEmptyMessageDelayed(REFRESH_COMPLETE, 1000);
-        }
-    }
-
-
-    //含有全部的权限
-    private boolean hasAllPermissionsGranted(@NonNull int[] grantResults) {
-        for (int grantResult : grantResults) {
-            if (grantResult == PackageManager.PERMISSION_DENIED) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public void handleMessage(Message msg) {
-        switch (msg.what) {
-            case REFRESH_COMPLETE:
-                finish();
+            case R.id.iv_qrcode://二维码
+                showQRCode();
                 break;
         }
     }
@@ -229,17 +228,10 @@ public class MainView extends PresenterActivity<MainPresenter> implements IMainV
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(mPresenter.ACTION_MAIN_SPECIATYPE)) {
+                // 首页根据语音跳转其他页面 exercise: 取号服务
                 SpecialType specialType = (SpecialType) intent.getSerializableExtra("specialType");
-
                 onMainHandle(specialType);
 //                mPresenter.receiveMotion(ComType.A, myTalk());//进入政策和本地语音等界面做的动作
-            } else if (intent.getAction().equals(mPresenter.ACTION_MAIN_SHOWTEXT)) {
-//                String quetion = intent.getStringExtra("question");
-//                if (!"".equals(quetion)) {
-//                    setQuestionText(quetion);
-//                }
-//                String text = intent.getStringExtra("showText");
-//                setAnwerText(text);
             }
         }
     };
@@ -250,14 +242,15 @@ public class MainView extends PresenterActivity<MainPresenter> implements IMainV
         /**
          * UDP
          * */
-//        mUdpAcceptReceiver = new UDPAcceptReceiver(this);
-//        IntentFilter intentFilter = new IntentFilter(Constants.UDP_ACCEPT_ACTION);
-//        mLbmManager.registerReceiver(mUdpAcceptReceiver, intentFilter);
+        mUdpAcceptReceiver = new UDPAcceptReceiver(this);
+        IntentFilter udp_intent = new IntentFilter(Constants.UDP_ACCEPT_ACTION);
+        mLbmManager.registerReceiver(mUdpAcceptReceiver, udp_intent);
+
         mPresenter.setMySpeech(MySpeech.SPEECH_AIUI);
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(mPresenter.ACTION_MAIN_SPECIATYPE);
-        intentFilter.addAction(mPresenter.ACTION_MAIN_SHOWTEXT);
-        intentFilter.addAction(mPresenter.ACTION_AIUI_EXIT);
+        intentFilter.addAction(BasePresenter.ACTION_MAIN_SPECIATYPE);
+        intentFilter.addAction(BasePresenter.ACTION_MAIN_SHOWTEXT);
+        intentFilter.addAction(BasePresenter.ACTION_AIUI_EXIT);
         registerReceiver(handleReceiver, intentFilter);
     }
 
@@ -266,16 +259,12 @@ public class MainView extends PresenterActivity<MainPresenter> implements IMainV
         unregisterReceiver(handleReceiver);
     }
 
-    //答案 显示
-    public void setAnwerText(String text) {
-        mChatAdapter.addItem(new Chat(text, 0));
-        doInfoScroll();
-    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
-    // 问题显示
-    public void setQuestionText(String text) {
-        mChatAdapter.addItem(new Chat(text, 1));
-        doInfoScroll();
+        mLbmManager.unregisterReceiver(mUdpAcceptReceiver);
+        stopService(new Intent(MainView.this, UdpService.class));
     }
 
     // 讲故事 笑话
@@ -291,7 +280,6 @@ public class MainView extends PresenterActivity<MainPresenter> implements IMainV
             case Story:
                 String[] arrStory = getResources().getStringArray(R.array.local_story);
                 String finalStory = arrStory[new Random().nextInt(arrStory.length)];
-
                 mChatAdapter.addItem(new Chat(result, 1));
                 mChatAdapter.addItem(new Chat(finalStory, 0));
                 doInfoScroll();
@@ -304,7 +292,6 @@ public class MainView extends PresenterActivity<MainPresenter> implements IMainV
             case Joke:
                 String[] arrJoke = getResources().getStringArray(R.array.local_joke);
                 String finalJoke = arrJoke[new Random().nextInt(arrJoke.length)];
-
                 mChatAdapter.addItem(new Chat(result, 1));
                 mChatAdapter.addItem(new Chat(finalJoke, 0));
                 doInfoScroll();
@@ -315,25 +302,22 @@ public class MainView extends PresenterActivity<MainPresenter> implements IMainV
 
     @Override
     public void spakeMove(SpecialType specialType, String result) {
-//        toAdapter.addItem(getChatMessage(ChatRecyclerAdapter.TO_USER_MSG, result));
-//        smoothScroll();
-//        mSoundPresenter.onCompleted();
-//        switch (type) {
-//            case Forward:
-//                mPresenter.receiveMotion(ComType.A, "A5038002AA");
-//                break;
-//            case Backoff:
-//                mPresenter.receiveMotion(ComType.A, "A5038008AA");
-//                break;
-//            case Turnleft:
-//                mPresenter.receiveMotion(ComType.A, "A5038004AA");
-//                ;
-//                break;
-//            case Turnright:
-//                mPresenter.receiveMotion(ComType.A, "A5038006AA");
-//
-//                break;
-//        }
+        mPresenter.onCompleted();
+        switch (specialType) {
+            case Forward:
+                mSerialPresenter.receiveMotion(ComType.A, "A5038002AA");
+                break;
+            case Backoff:
+                mSerialPresenter.receiveMotion(ComType.A, "A5038008AA");
+                break;
+            case Turnleft:
+                mSerialPresenter.receiveMotion(ComType.A, "A5038004AA");
+                ;
+                break;
+            case Turnright:
+                mSerialPresenter.receiveMotion(ComType.A, "A5038006AA");
+                break;
+        }
     }
 
     // aiui 回答
@@ -345,6 +329,14 @@ public class MainView extends PresenterActivity<MainPresenter> implements IMainV
     // 播放答案
     protected void addSpeakAnswer(String messageContent) {
         mPresenter.doAnswer(messageContent);
+        // 根据长度做出对应的动作
+        if (messageContent.length() <= 13) {
+            mSerialPresenter.receiveMotion(ComType.A, "A50C8001AA");
+        } else if (messageContent.length() > 13 && messageContent.length() <= 40) {
+            mSerialPresenter.receiveMotion(ComType.A, "A50C8003AA");
+        } else {
+            mSerialPresenter.receiveMotion(ComType.A, "A50C8021AA");
+        }
     }
 
     @Override
@@ -365,11 +357,12 @@ public class MainView extends PresenterActivity<MainPresenter> implements IMainV
     //普通问答
     @Override
     public void refHomePage(String question, String finalText) {
-        if (question != null) {
+        if (!"".equals(question)) {
             mChatAdapter.addItem(new Chat(question, 1));
-            mChatAdapter.addItem(new Chat(finalText, 0));
             doInfoScroll();
         }
+        mChatAdapter.addItem(new Chat(finalText, 0));
+        doInfoScroll();
     }
 
     //新闻
@@ -431,6 +424,16 @@ public class MainView extends PresenterActivity<MainPresenter> implements IMainV
         startActivity(intent);
     }
 
+    /**
+     * 开始跳舞 A50C80E1AA
+     * 停止跳舞 A50C80E2AA
+     */
+    @Override
+    public void doDance() {
+        DanceUtils.getInstance().startDance(MainView.this);//唱歌
+        mSerialPresenter.receiveMotion(ComType.A, "A50C80E1AA");
+    }
+
     // 首页 语音控制跳转
     public void onMainHandle(SpecialType specialType) {
         switch (specialType) {
@@ -441,16 +444,13 @@ public class MainView extends PresenterActivity<MainPresenter> implements IMainV
                 startActivity(RegisterView.class);
                 break;
             case IllegalrService://违章查询
-                showToast("暂未开通此功能");
-                mPresenter.doAnswer("暂未开通此功能");
-                mPresenter.startRecognizerListener();
-                mPresenter.setMySpeech(MySpeech.SPEECH_AIUI);
+                startActivity(TrafficView.class);
                 break;
             case CostService://e缴费
-                showToast("暂未开通此功能");
-                mPresenter.doAnswer("暂未开通此功能");
-                mPresenter.startRecognizerListener();
-                mPresenter.setMySpeech(MySpeech.SPEECH_AIUI);
+//                showToast("暂未开通此功能");
+//                mPresenter.doAnswer("暂未开通此功能");
+//                mPresenter.startRecognizerListener();
+//                mPresenter.setMySpeech(MySpeech.SPEECH_AIUI);
                 break;
             case IdentityService://身份认证
                 startActivity(FaceDistinguishView.class);
@@ -462,5 +462,34 @@ public class MainView extends PresenterActivity<MainPresenter> implements IMainV
         }
     }
 
+    /**
+     * 二维码
+     */
+    public void showQRCode() {
+        if (findQRCodeDialog == null) {
+            findQRCodeDialog = new FindQRCodeDialog(MainView.this);
+        }
+        findQRCodeDialog.show();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
+    @Override
+    public void UDPinitFinsih(String content) {
+        showToast(content);
+    }
+
+    @Override
+    public void UDPAcceptMessage(String content) {
+        if (isSport) {
+//            showToast(content);
+            ReceiveMotion(ComType.A, content);
+        }
+    }
 
 }

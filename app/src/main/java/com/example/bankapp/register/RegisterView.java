@@ -16,6 +16,7 @@ import com.example.bankapp.adapter.RegisterLineUpAdapter;
 import com.example.bankapp.animator.RegisterAnimation;
 import com.example.bankapp.animator.SlideInOutBottomItemAnimator;
 import com.example.bankapp.asr.MySpeech;
+import com.example.bankapp.base.presenter.BasePresenter;
 import com.example.bankapp.base.view.PresenterActivity;
 import com.example.bankapp.common.enums.SpecialType;
 import com.example.bankapp.modle.RegisterLineUp;
@@ -102,11 +103,11 @@ public class RegisterView extends PresenterActivity<RegisterPresenter> implement
         //进场动画
         rvRegisterLineUp.setLayoutAnimation(RegisterAnimation.getInstance());
         //模拟数据
-        registerLineUpList.add(new RegisterLineUp("1", "4人"));
-        registerLineUpList.add(new RegisterLineUp("2", "12人"));
-        registerLineUpList.add(new RegisterLineUp("3", "7人"));
-        registerLineUpList.add(new RegisterLineUp("4", "3人"));
-        registerLineUpList.add(new RegisterLineUp("5", "8人"));
+        registerLineUpList.add(new RegisterLineUp("1", "4"));
+        registerLineUpList.add(new RegisterLineUp("2", "12"));
+        registerLineUpList.add(new RegisterLineUp("3", "7"));
+        registerLineUpList.add(new RegisterLineUp("4", "3"));
+        registerLineUpList.add(new RegisterLineUp("5", "8"));
         //设置适配器
         registerLineUpAdapter = new RegisterLineUpAdapter(RegisterView.this, registerLineUpList);
         rvRegisterLineUp.setAdapter(registerLineUpAdapter);
@@ -124,16 +125,17 @@ public class RegisterView extends PresenterActivity<RegisterPresenter> implement
         registerLineUpAdapter.OnApplyClick(new RegisterLineUpAdapter.OnApplyClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                startActivity(RegisterServiceView.class);
+                mPresenter.doAnswer("请拿取您的号码，在您前面还有" + registerLineUpList.get(position).getLineNum() + "人正在排队，请您耐心等待");
+//                startActivity(RegisterServiceView.class);
             }
         });
     }
 
     @Override
     public void onResumeVoice() {
-        mPresenter.setMySpeech(MySpeech.SPEECH_AIUI);
+        mPresenter.setMySpeech(MySpeech.SPEECH_EXIT);
         IntentFilter filter = new IntentFilter();
-        filter.addAction(mPresenter.ACTION_AIUI_EXIT);
+        filter.addAction(BasePresenter.ACTION_OTHER_FINISH);
         registerReceiver(businessReceiver, filter);
     }
 
@@ -145,7 +147,7 @@ public class RegisterView extends PresenterActivity<RegisterPresenter> implement
     private BroadcastReceiver businessReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(mPresenter.ACTION_AIUI_EXIT)) {
+            if (intent.getAction().equals(BasePresenter.ACTION_OTHER_FINISH)) {
                 onExit();
             }
         }
@@ -237,6 +239,7 @@ public class RegisterView extends PresenterActivity<RegisterPresenter> implement
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
     }
+
     /**
      * 复写的方法
      */
@@ -302,6 +305,11 @@ public class RegisterView extends PresenterActivity<RegisterPresenter> implement
 
     @Override
     public void doCallPhone(String phoneNumber) {
+
+    }
+
+    @Override
+    public void doDance() {
 
     }
 

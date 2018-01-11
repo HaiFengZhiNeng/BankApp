@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -17,6 +18,7 @@ import com.example.bankapp.asr.MyAiuiListener;
 import com.example.bankapp.asr.MyRecognizerListener;
 import com.example.bankapp.asr.MySpeech;
 import com.example.bankapp.asr.MySynthesizerListener;
+import com.example.bankapp.base.config.Constant;
 import com.example.bankapp.base.view.UiView;
 import com.example.bankapp.common.Constants;
 import com.example.bankapp.common.enums.FollowType;
@@ -59,7 +61,9 @@ import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.util.ResourceUtil;
 import com.iflytek.sunflower.FlowerCollector;
+import com.yuntongxun.ecsdk.ECDevice;
 import com.yuntongxun.ecsdk.ECMessage;
+import com.yuntongxun.ecsdk.ECVoIPCallManager;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -76,6 +80,27 @@ import static com.example.bankapp.common.Constants.mySpeechType;
  */
 public abstract class BasePresenter<T extends UiView> implements MySynthesizerListener.SynListener,
         MyAiuiListener.AiListener, MyRecognizerListener.RecognListener {
+    /**
+     * 是否来电
+     */
+    protected boolean mIncomingCall = false;
+    /**
+     * 呼叫唯一标识号
+     */
+    protected String mCallId;
+    /**
+     * VoIP呼叫类型（音视频）
+     */
+    protected ECVoIPCallManager.CallType mCallType;
+    /**
+     * 通话昵称
+     */
+    protected String mCallName;
+    /**
+     * 通话号码
+     */
+    protected String mCallNumber;
+    public AudioManager mAudioManager;
 
     public static final String ACTION_MAIN_SHOWTEXT = "com.example.bankapp.main.showtext";
     public static final String ACTION_MAIN_SPECIATYPE = "com.example.bankapp.main";
@@ -106,14 +131,13 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
 
     private Handler mHandler = new Handler();
 
-
     private int ret = 0;
-    //拨打电话
-    private TeleType teleType;
     private String phoneNumber;
 
     public static boolean isVoice = true;//是否正在说话
 
+    //拨打电话
+    private TeleType teleType;
     public String TAG = this.getClass().getSimpleName();
     private BaseHandler mBaseHandler;
     protected T mView;
@@ -136,11 +160,12 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
     }
 
     /**
-     * 同 Activity 哦你Create
+     * 同 Activity onCreate
      *
      * @param saveInstanceState
      */
     public void onCreate(Bundle saveInstanceState) {
+        initVideo();
     }
 
     /**
@@ -364,6 +389,28 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
             if (mPresenter != null)
                 mPresenter.handleMessage(msg);
         }
+    }
+
+    public void initVideo() {
+        mAudioManager = ((AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE));
+        if (initVideoView()) {
+            return;
+        }
+        if (mCallType == null) {
+            mCallType = ECVoIPCallManager.CallType.VOICE;
+        }
+    }
+
+    protected void exit() {
+        if (mView != null)
+            ((Activity) mView).finish();
+    }
+
+
+    public boolean initVideoView() {
+        mIncomingCall = !((Activity) mView).getIntent().getBooleanExtra(Constant.ACTION_CALLBACKING, false);
+        mCallType = (ECVoIPCallManager.CallType) ((Activity) mView).getIntent().getSerializableExtra(ECDevice.CALLTYPE);
+        return false;
     }
 
     public void init() {
@@ -702,7 +749,8 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
     @Override
     public void onCompleted() {
 
-        mHandler.postDelayed(runnable, 400);
+        Log.e(TAG, "onCompleted");
+        mHandler.postDelayed(runnable, 1000);
     }
 
     Runnable runnable = new Runnable() {
@@ -726,6 +774,7 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
 
     @Override
     public void onSpeakBegin() {
+        Log.e("GG", "onSpeakBegin");
         isTalking = false;
         stopRecognizerListener();
     }

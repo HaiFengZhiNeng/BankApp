@@ -116,6 +116,9 @@ public class MainView extends PresenterActivity<MainPresenter> implements UDPAcc
     private UDPAcceptReceiver mUdpAcceptReceiver;
     private LocalBroadcastManager mLbmManager;
 
+    //第一次进入Main
+    private boolean isFirst = true;
+
     @Override
     protected int getContentViewResource() {
         return (R.layout.activity_main);
@@ -186,6 +189,10 @@ public class MainView extends PresenterActivity<MainPresenter> implements UDPAcc
         startService(new Intent(MainView.this, UdpService.class));
         mLbmManager = LocalBroadcastManager.getInstance(this);
         startService(new Intent(this, UdpService.class));
+
+        mUdpAcceptReceiver = new UDPAcceptReceiver(this);
+        IntentFilter udp_intent = new IntentFilter(Constants.UDP_ACCEPT_ACTION);
+        mLbmManager.registerReceiver(mUdpAcceptReceiver, udp_intent);
     }
 
     @OnClick({R.id.tv_registerService, R.id.tv_illegalrService, R.id.tv_costService, R.id.tv_businessService, R.id.tv_identityService, R.id.tv_moneyService, R.id.iv_qrcode})
@@ -231,7 +238,6 @@ public class MainView extends PresenterActivity<MainPresenter> implements UDPAcc
                 // 首页根据语音跳转其他页面 exercise: 取号服务
                 SpecialType specialType = (SpecialType) intent.getSerializableExtra("specialType");
                 onMainHandle(specialType);
-//                mPresenter.receiveMotion(ComType.A, myTalk());//进入政策和本地语音等界面做的动作
             }
         }
     };
@@ -242,16 +248,18 @@ public class MainView extends PresenterActivity<MainPresenter> implements UDPAcc
         /**
          * UDP
          * */
-        mUdpAcceptReceiver = new UDPAcceptReceiver(this);
-        IntentFilter udp_intent = new IntentFilter(Constants.UDP_ACCEPT_ACTION);
-        mLbmManager.registerReceiver(mUdpAcceptReceiver, udp_intent);
-
         mPresenter.setMySpeech(MySpeech.SPEECH_AIUI);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BasePresenter.ACTION_MAIN_SPECIATYPE);
         intentFilter.addAction(BasePresenter.ACTION_MAIN_SHOWTEXT);
         intentFilter.addAction(BasePresenter.ACTION_AIUI_EXIT);
         registerReceiver(handleReceiver, intentFilter);
+        if (isFirst) {
+            isFirst = false;
+        } else {
+            //开启语音监听
+            mBaseHandler.sendEmptyMessageDelayed(100, 500);
+        }
     }
 
     @Override
@@ -320,11 +328,6 @@ public class MainView extends PresenterActivity<MainPresenter> implements UDPAcc
         }
     }
 
-    // aiui 回答
-    @Override
-    public void doAiuiAnwer(String anwer) {
-        addSpeakAnswer(anwer);
-    }
 
     // 播放答案
     protected void addSpeakAnswer(String messageContent) {
@@ -352,6 +355,12 @@ public class MainView extends PresenterActivity<MainPresenter> implements UDPAcc
     @Override
     protected void onEventLR() {
 
+    }
+
+    // aiui 回答
+    @Override
+    public void doAiuiAnwer(String anwer) {
+        addSpeakAnswer(anwer);
     }
 
     //普通问答
@@ -470,13 +479,6 @@ public class MainView extends PresenterActivity<MainPresenter> implements UDPAcc
             findQRCodeDialog = new FindQRCodeDialog(MainView.this);
         }
         findQRCodeDialog.show();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 
     @Override

@@ -30,6 +30,7 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.USB_PERMISSION" />
+
     <!-- 接收IM消息的自定义权限 -->
     <permission
         android:name="com.example.bankapp.permission.RECEIVE_MSG"
@@ -40,8 +41,10 @@
     <permission
         android:name="com.example.bankapp.INCOMING_CALL"
         android:protectionLevel="signature" />
+
     <!-- 允许访问振动设备 -->
     <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:name=".BankApplication"
         android:allowBackup="true"
@@ -86,15 +89,27 @@
             android:name=".traffic.TrafficView"
             android:theme="@style/dialog_activity" />
 
+        <!--版本更新所要用到的 fileProvider 用于兼容7.0-->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <!--元数据-->
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/myfilepath" />
+        </provider>
         <service
             android:name="com.huashi.otg.sdk.HsOtgService"
             android:enabled="true"
             android:exported="true" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".traffic.record.TrafficRecordView"></activity>
+        <activity android:name=".traffic.record.TrafficRecordView" />
 
         <!-- SDK核心服务配置 -->
         <service
@@ -166,6 +181,10 @@
 
         <!-- UDP -->
         <service android:name=".service.UdpService" />
+
+        <activity
+            android:name=".main.videocall.VideoCallView"
+            android:theme="@style/Dialog_Activity" />
     </application>
 
 </manifest>

@@ -129,6 +129,7 @@ public class MoneyServiceView extends PresenterActivity<MoneyServicePresenter> i
 
     @Override
     public void onPauseReceiver() {
+        mPresenter.stopRecognizerListener();
         unregisterReceiver(businessReceiver);
     }
 
@@ -332,7 +333,7 @@ public class MoneyServiceView extends PresenterActivity<MoneyServicePresenter> i
             startActivity(VideoDetailView.class, bundle);
         } else {//没有听懂的结果
             text = resFoFinal(R.array.no_voice);
-            doLocalChatScroll(result, text);
+//            doLocalChatScroll(result, text);
             addSpeakAnswer(text);
         }
 

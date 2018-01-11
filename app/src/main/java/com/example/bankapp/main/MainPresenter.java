@@ -6,11 +6,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.bankapp.BankApplication;
 import com.example.bankapp.R;
 import com.example.bankapp.base.config.Constant;
 import com.example.bankapp.base.presenter.BasePresenter;
 import com.example.bankapp.common.enums.ComType;
 import com.example.bankapp.database.manager.IntroduceManager;
+import com.example.bankapp.main.videocall.VideoCallView;
 import com.example.bankapp.modle.LocalMoneyService;
 import com.example.bankapp.service.UDPAcceptReceiver;
 import com.example.bankapp.splash.SingleLogin;
@@ -25,8 +27,18 @@ import com.yuntongxun.ecsdk.ECError;
 import com.yuntongxun.ecsdk.ECInitParams;
 import com.yuntongxun.ecsdk.ECMessage;
 import com.yuntongxun.ecsdk.ECVoIPSetupManager;
+import com.yuntongxun.ecsdk.OnChatReceiveListener;
+import com.yuntongxun.ecsdk.OnMeetingListener;
 import com.yuntongxun.ecsdk.SdkErrorCode;
+import com.yuntongxun.ecsdk.VideoRatio;
+import com.yuntongxun.ecsdk.im.ECMessageNotify;
 import com.yuntongxun.ecsdk.im.ECTextMessageBody;
+import com.yuntongxun.ecsdk.im.group.ECGroupNoticeMessage;
+import com.yuntongxun.ecsdk.meeting.intercom.ECInterPhoneMeetingMsg;
+import com.yuntongxun.ecsdk.meeting.video.ECVideoMeetingMsg;
+import com.yuntongxun.ecsdk.meeting.voice.ECVoiceMeetingMsg;
+
+import java.util.List;
 
 import static com.example.bankapp.splash.SingleLogin.isInitSuccess;
 
@@ -43,6 +55,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
 
     public MainPresenter(IMainView mView) {
         super(mView);
+
     }
 
     @Override
@@ -123,11 +136,12 @@ public class MainPresenter extends BasePresenter<IMainView> {
          * 登录回调
          */
         ECDevice.setOnDeviceConnectListener(onECDeviceConnectListener);
+
         /**
          * 设置接收VoIP来电事件通知Intent
          * 呼入界面activity、开发者需修改该类
          * */
-        Intent intent = new Intent(getContext(), MainView.class);
+        Intent intent = new Intent(getContext(), VideoCallView.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         ECDevice.setPendingIntent(pendingIntent);
@@ -184,6 +198,97 @@ public class MainPresenter extends BasePresenter<IMainView> {
             }
         }
     };
+    /**
+     * IM接收消息监听，使用IM功能的开发者需要设置。
+     */
+    private OnChatReceiveListener onChatReceiveListener = new OnChatReceiveListener() {
+        @Override
+        public void OnReceivedMessage(ECMessage ecMessage) {
+
+        }
+
+        @Override
+        public void onReceiveMessageNotify(ECMessageNotify ecMessageNotify) {
+
+        }
+
+        @Override
+        public void OnReceiveGroupNoticeMessage(ECGroupNoticeMessage ecGroupNoticeMessage) {
+
+        }
+
+        @Override
+        public void onOfflineMessageCount(int i) {
+
+        }
+
+        @Override
+        public int onGetOfflineMessage() {
+            return 0;
+        }
+
+        @Override
+        public void onReceiveOfflineMessage(List<ECMessage> list) {
+
+        }
+
+        @Override
+        public void onReceiveOfflineMessageCompletion() {
+
+        }
+
+        @Override
+        public void onServicePersonVersion(int i) {
+
+        }
+
+        @Override
+        public void onReceiveDeskMessage(ECMessage ecMessage) {
+
+        }
+
+        @Override
+        public void onSoftVersion(String s, int i) {
+
+        }
+    };
+
+    /**
+     * 音视频会议回调监听，使用音视频会议功能的开发者需要设置。
+     */
+    public void onMeetingListener() {
+        if (ECDevice.getECMeetingManager() != null) {
+            ECDevice.getECMeetingManager().setOnMeetingListener(new OnMeetingListener() {
+                @Override
+                public void onVideoRatioChanged(VideoRatio videoRatio) {
+                    L.e("key", "1初始化SDK成功");
+                }
+
+                @Override
+                public void onReceiveInterPhoneMeetingMsg(ECInterPhoneMeetingMsg msg) {
+                    // 处理实时对讲消息Push
+                    L.e("key", "2初始化SDK成功");
+                }
+
+                @Override
+                public void onReceiveVoiceMeetingMsg(ECVoiceMeetingMsg msg) {
+                    // 处理语音会议消息push
+                    L.e("key", "3初始化SDK成功");
+                }
+
+                @Override
+                public void onReceiveVideoMeetingMsg(ECVideoMeetingMsg msg) {
+                    // 处理视频会议消息Push（暂未提供）
+                    L.e("key", "4初始化SDK成功");
+                }
+
+                @Override
+                public void onMeetingPermission(String s) {
+                    L.e("key", "5初始化SDK成功");
+                }
+            });
+        }
+    }
 
     @Override
     public void onLocalError() {

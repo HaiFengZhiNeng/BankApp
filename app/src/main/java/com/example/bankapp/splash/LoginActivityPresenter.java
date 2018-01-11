@@ -31,12 +31,13 @@ public class LoginActivityPresenter extends BasePresenter<ILoginView> {
 
     public LoginActivityPresenter(ILoginView mView) {
         super(mView);
+        mLogin = SingleLogin.getInstance(getContext(), "");
     }
 
     @Override
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
-        mLogin = SingleLogin.getInstance(getContext(), "");
+        mLogin = SingleLogin.getInstance(getContext(), "asd");
     }
 
     SingleLogin.OnInitListener initListener = new SingleLogin.OnInitListener() {
@@ -144,6 +145,7 @@ public class LoginActivityPresenter extends BasePresenter<ILoginView> {
             } else if (state == ECDevice.ECConnectState.CONNECT_SUCCESS) {
                 L.e("key", "==登陆成功" + error.toString());
                 startActivity(MainView.class);
+                exit();
             }
         }
     };

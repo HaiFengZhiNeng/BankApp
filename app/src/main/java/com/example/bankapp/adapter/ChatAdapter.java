@@ -15,9 +15,10 @@ import java.util.List;
 
 /**
  * 对话 Adapter
- *@author Guanluocang
- *created at 2017/12/25 、
-*/
+ *
+ * @author Guanluocang
+ *         created at 2017/12/25 、
+ */
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
 
@@ -54,13 +55,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Chat chat = mChatList.get(position);
-
-        int itemViewType = getItemViewType(position);
+        int itemViewType = getItemViewType(position);// 获取每个item的type
         switch (itemViewType) {
-            case MSG_PERSONAL:
+            case MSG_PERSONAL://询问
                 personalMsgLayout((PersonalChatViewHolder) holder, chat, position);
                 break;
-            case MSG_ROBOT:
+            case MSG_ROBOT://机器人回答
                 robotMsgLayout((RobotChatViewHolder) holder, chat, position);
                 break;
         }

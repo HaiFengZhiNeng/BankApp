@@ -91,7 +91,6 @@ public class AddVideoView extends PresenterActivity<AddVideoPresenter> implement
     /**
      * 选择视频
      */
-
     public void pickLoacalVideo() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");   //打开文件类型

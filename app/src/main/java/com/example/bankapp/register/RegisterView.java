@@ -133,6 +133,8 @@ public class RegisterView extends PresenterActivity<RegisterPresenter> implement
 
     @Override
     public void onResumeVoice() {
+        //开启语音
+        mBaseHandler.sendEmptyMessageDelayed(100, 1000);
         mPresenter.setMySpeech(MySpeech.SPEECH_EXIT);
         IntentFilter filter = new IntentFilter();
         filter.addAction(BasePresenter.ACTION_OTHER_FINISH);

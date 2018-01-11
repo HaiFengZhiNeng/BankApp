@@ -16,18 +16,26 @@ import com.example.bankapp.R;
 import com.example.bankapp.base.config.Constant;
 import com.example.bankapp.base.handler.BaseHandler;
 import com.example.bankapp.base.presenter.BasePresenter;
+import com.example.bankapp.common.Constants;
 import com.example.bankapp.common.enums.ComType;
 import com.example.bankapp.common.enums.SpecialType;
 import com.example.bankapp.common.instance.SpeakTts;
+import com.example.bankapp.database.LocalMoneyServiceDao;
+import com.example.bankapp.database.manager.IntroduceManager;
+import com.example.bankapp.modle.LocalMoneyService;
 import com.example.bankapp.serialport.ISerialPortView;
 import com.example.bankapp.serialport.SerialPresenter;
 import com.example.bankapp.service.UDPAcceptReceiver;
 import com.example.bankapp.service.UsbService;
 import com.example.bankapp.splash.SingleLogin;
+import com.example.bankapp.util.BitmapUtils;
 import com.example.bankapp.util.DanceUtils;
+import com.example.bankapp.util.FileUtil;
+import com.example.bankapp.util.GsonUtil;
 import com.example.bankapp.util.L;
 import com.example.bankapp.util.MediaPlayerUtil;
 import com.example.bankapp.util.PhoneUtil;
+import com.example.bankapp.util.PreferencesUtils;
 import com.example.bankapp.util.ReceiveMessage;
 import com.example.bankapp.util.SendToControll;
 import com.jph.takephoto.app.TakePhoto;
@@ -43,6 +51,7 @@ import com.yuntongxun.ecsdk.im.ECTextMessageBody;
 
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Random;
 
 import static com.example.bankapp.base.presenter.BasePresenter.isSport;
@@ -67,6 +76,10 @@ public abstract class PresenterActivity<T extends BasePresenter> extends BaseAct
     private Handler outHandler = new BaseHandler<>(PresenterActivity.this);
     private long OUT_TIME = 500;
 
+    //本地语音数据库
+    private IntroduceManager introduceManager;
+    public static Handler mBaseHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mPresenter = createPresenter();
@@ -75,6 +88,7 @@ public abstract class PresenterActivity<T extends BasePresenter> extends BaseAct
         mPresenter.onCreate(savedInstanceState);
         mSerialPresenter = new SerialPresenter(this);
         Constant.IP = PhoneUtil.getWifiIP(this);
+        initDataBase();
         SingleLogin.getInstance(this, "").setReceive(this);
     }
 
@@ -91,6 +105,24 @@ public abstract class PresenterActivity<T extends BasePresenter> extends BaseAct
         mPresenter.onViewCreated();
     }
 
+    //初始化数据库
+    public void initDataBase() {
+        introduceManager = new IntroduceManager();
+        mBaseHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case 100:
+                        mPresenter.doVoiceSwitch(true);
+                        mPresenter.onResume();
+                        break;
+                }
+            }
+        };
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -100,8 +132,7 @@ public abstract class PresenterActivity<T extends BasePresenter> extends BaseAct
 //        filter.addAction(UsbService.ACTION_USB_RECEIVER);
 //        this.registerReceiver(this.usbReceiver, filter);
         //开启语音
-        mPresenter.doVoiceSwitch(true);
-        mPresenter.onResume();
+//        mBaseHandler.sendEmptyMessageDelayed(100, 1000);
     }
 
     // 在onresume中判断语音输入类型
@@ -473,22 +504,22 @@ public abstract class PresenterActivity<T extends BasePresenter> extends BaseAct
                 isVoice = false;
             }
         } else if (msg.getUserData().equals("version")) {
-//            int version = Integer.valueOf(stateBody.getMessage());// 控制端发过来的版本
-//            int currentVersion = PreferencesUtils.getInt(this, "LocalVoice");// 本地版本
-//            if (version < currentVersion) {// 控制端小于机器人端
-//                List<UserInfo> userInfos = UserDao.getInstance().queryUserByType("Data");
-//                if (userInfos != null && userInfos.size() > 0) {
-//                    String voiceBean = GsonUtil.GsonString(userInfos);
-//                    SendToControll sendToControll = new SendToControll();
-//                    sendToControll.SendControll(currentVersion + "", "version");
-//                    boolean isSave = FileUtil.saveFile(voiceBean, BitmapUtils.projectPath + "localVoice.txt");
-//                    if (isSave) {
-//                        sendToControll.SendLocal(BitmapUtils.projectPath + "localVoice.txt", "localVoiceFile");
-//                    }
-//                } else {
-//                    showToast("本地沒有語音");
-//                }
-//            }
+            int version = Integer.valueOf(stateBody.getMessage());// 控制端发过来的版本
+            int currentVersion = PreferencesUtils.getInt(this, "LocalVoice");// 本地版本
+            if (version < currentVersion) {// 控制端小于机器人端
+                List<LocalMoneyService> userInfos = introduceManager.loadAll();
+                if (userInfos != null && userInfos.size() > 0) {
+                    String voiceBean = GsonUtil.GsonString(userInfos);
+                    SendToControll sendToControll = new SendToControll();
+                    sendToControll.SendControll(currentVersion + "", "version");
+                    boolean isSave = FileUtil.saveFile(voiceBean, BitmapUtils.projectPath + "localVoice.txt");
+                    if (isSave) {
+                        sendToControll.SendLocal(BitmapUtils.projectPath + "localVoice.txt", "localVoiceFile");
+                    }
+                } else {
+                    showToast("本地沒有語音");
+                }
+            }
 
         } else if (msg.getUserData().equals("IP")) {
             String ip = stateBody.getMessage();

@@ -34,7 +34,7 @@ import com.example.bankapp.util.PermissionsChecker;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SplashView extends AppCompatActivity implements BaseHandler.HandleMessage {
+public class SplashView extends AppCompatActivity implements BaseHandler.HandleMessage, ILoginView {
 
     @BindView(R.id.iv_splash)
     ImageView ivSplash;
@@ -149,6 +149,66 @@ public class SplashView extends AppCompatActivity implements BaseHandler.HandleM
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void special(String result, SpecialType type) {
+
+    }
+
+    @Override
+    public void spakeMove(SpecialType specialType, String result) {
+
+    }
+
+    @Override
+    public void doAiuiAnwer(String anwer) {
+
+    }
+
+    @Override
+    public void refHomePage(String question, String finalText) {
+
+    }
+
+    @Override
+    public void refHomePage(String question, News news) {
+
+    }
+
+    @Override
+    public void refHomePage(String question, Radio radio) {
+
+    }
+
+    @Override
+    public void refHomePage(String question, Poetry poetry) {
+
+    }
+
+    @Override
+    public void refHomePage(String question, Cookbook cookbook) {
+
+    }
+
+    @Override
+    public void refHomePage(String question, EnglishEveryday englishEveryday) {
+
+    }
+
+    @Override
+    public void doCallPhone(String phoneNumber) {
+
+    }
+
+    @Override
+    public void doDance() {
+
     }
 
 //    public void doJump() {

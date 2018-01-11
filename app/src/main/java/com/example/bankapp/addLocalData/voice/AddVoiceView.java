@@ -20,6 +20,7 @@ import com.example.bankapp.modle.voice.News;
 import com.example.bankapp.modle.voice.Poetry;
 import com.example.bankapp.modle.voice.radio.Radio;
 import com.example.bankapp.util.DialogUtils;
+import com.example.bankapp.util.PreferencesUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,6 +58,12 @@ public class AddVoiceView extends PresenterActivity<AddVoicePreSenter> implement
     //导航
     public static final int LOCAL_NAVIGATION = 1;
 
+    //默认类型
+    private int curSoundType = 0;
+    //默认表情类型
+    private int curExpression = 0;
+    //默动作认类型
+    private int curAction = 0;
     //添加的类型
     private int addSoundType;
 
@@ -95,13 +102,26 @@ public class AddVoiceView extends PresenterActivity<AddVoicePreSenter> implement
     protected void onViewCreated() {
         super.onViewCreated();
         initView();
+        initData();
     }
+
 
     private void initView() {
         //初始化 数据库Manager
         introduceManager = new IntroduceManager();
         //添加按钮 隐藏
         ivAddData.setVisibility(View.GONE);
+    }
+
+    //默认类型
+    private void initData() {
+        tvDatatype.setText(getResources().getStringArray(R.array.dataType)[curSoundType]);
+        tvExpression.setText(getResources().getStringArray(R.array.expression)[curExpression]);
+        if (curSoundType == LOCAL_SPEECH) {
+            tvAction.setText(getResources().getStringArray(R.array.action)[curAction]);
+        } else if (curSoundType == LOCAL_NAVIGATION) {
+            tvAction.setText(getResources().getStringArray(R.array.navigation)[curAction]);
+        }
     }
 
     @OnClick({R.id.iv_goback, R.id.tv_add, R.id.tv_expression, R.id.tv_action, R.id.tv_datatype})
@@ -172,6 +192,12 @@ public class AddVoiceView extends PresenterActivity<AddVoicePreSenter> implement
         //判断是否有数据 有 则更新 无 则 插入
         //TODO 优化添加数据 以及点击事件
         introduceManager.insert(new LocalMoneyService(type, question, answer, action, resArray(R.array.action)[addActionItem], expression, resArray(R.array.expression)[addExpressionItem]));
+        int version = PreferencesUtils.getInt(this, "LocalVoice", -1);
+        if (version == -1) {
+            PreferencesUtils.putInt(this, "LocalVoice", 1);
+        } else {
+            PreferencesUtils.putInt(this, "LocalVoice", version + 1);
+        }
         finish();
         showToast("添加成功");
     }

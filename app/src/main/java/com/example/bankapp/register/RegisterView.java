@@ -143,6 +143,7 @@ public class RegisterView extends PresenterActivity<RegisterPresenter> implement
 
     @Override
     public void onPauseReceiver() {
+        mPresenter.stopRecognizerListener();
         unregisterReceiver(businessReceiver);
     }
 

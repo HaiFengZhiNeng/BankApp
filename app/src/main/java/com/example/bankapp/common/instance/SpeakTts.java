@@ -75,12 +75,13 @@ public class SpeakTts {
         if (engineType.equals(SpeechConstant.TYPE_CLOUD)) {
             mTts.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
             mTts.setParameter(SpeechConstant.VOICE_NAME, mSpokesman);
-        } else if (engineType.equals(SpeechConstant.TYPE_LOCAL)) {
-            mTts.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_LOCAL);
-            mTts.setParameter(ResourceUtil.TTS_RES_PATH, getResTtsPath());
-            //发言人
-            mTts.setParameter(SpeechConstant.VOICE_NAME, mSpokesman);
         }
+//        else if (engineType.equals(SpeechConstant.TYPE_LOCAL)) {
+//            mTts.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_LOCAL);
+//            mTts.setParameter(ResourceUtil.TTS_RES_PATH, getResTtsPath());
+        //发言人
+//            mTts.setParameter(SpeechConstant.VOICE_NAME, mSpokesman);
+//        }
         //说话速度
         mTts.setParameter(SpeechConstant.SPEED, TTS_SPEED);
         //说话音量

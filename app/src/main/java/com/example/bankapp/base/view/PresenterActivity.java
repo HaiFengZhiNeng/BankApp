@@ -79,6 +79,7 @@ public abstract class PresenterActivity<T extends BasePresenter> extends BaseAct
     //本地语音数据库
     private IntroduceManager introduceManager;
     public static Handler mBaseHandler;
+    private boolean isFirst = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +89,11 @@ public abstract class PresenterActivity<T extends BasePresenter> extends BaseAct
         mPresenter.onCreate(savedInstanceState);
         mSerialPresenter = new SerialPresenter(this);
         Constant.IP = PhoneUtil.getWifiIP(this);
-        initDataBase();
-        SingleLogin.getInstance(this, "").setReceive(this);
+        if(isFirst){
+            initDataBase();
+            SingleLogin.getInstance(this, "").setReceive(this);
+            isFirst = false;
+        }
     }
 
     public abstract T createPresenter();

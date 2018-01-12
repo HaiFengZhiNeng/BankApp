@@ -1,9 +1,11 @@
 package com.example.bankapp.traffic;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.bankapp.R;
 import com.example.bankapp.asr.MySpeech;
+import com.example.bankapp.base.presenter.BasePresenter;
 import com.example.bankapp.base.view.PresenterActivity;
 import com.example.bankapp.common.enums.SpecialType;
 import com.example.bankapp.modle.voice.Cookbook;
@@ -94,13 +97,29 @@ public class TrafficView extends PresenterActivity<TrafficPresenter> implements 
 
     @Override
     public void onResumeVoice() {
+        //开启语音
         mPresenter.setEngineType(MySpeech.SPEECH_NULL);
+        mPresenter.setMySpeech(MySpeech.SPEECH_VOICE);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BasePresenter.ACTION_OTHER_EXIT);
+        filter.addAction(BasePresenter.ACTION_OTHER_RESULT);
+        registerReceiver(businessReceiver, filter);
     }
 
     @Override
     public void onPauseReceiver() {
-
+        mPresenter.stopRecognizerListener();
+        unregisterReceiver(businessReceiver);
     }
+
+    private BroadcastReceiver businessReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(BasePresenter.ACTION_OTHER_FINISH)) {
+                onExit();
+            }
+        }
+    };
 
     @Override
     protected int getContentViewResource() {

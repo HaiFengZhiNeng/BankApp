@@ -142,6 +142,37 @@ public class MainView extends PresenterActivity<MainPresenter> implements UDPAcc
 
     }
 
+
+    @Override
+    protected void onPause() {
+        Log.e("GG", "Main onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.e("GG", "Main onRestart");
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.e("GG", "Main onResume");
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        Log.e("GG", "Main onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.e("GG", "Main onPause");
+        super.onStop();
+    }
+
     // 初始化云通讯完成
     @Override
     public void initECSuccess(boolean isSuccess) {
@@ -248,6 +279,7 @@ public class MainView extends PresenterActivity<MainPresenter> implements UDPAcc
         /**
          * UDP
          * */
+        Log.e("GG", "Main onResumeVoice");
         mPresenter.setMySpeech(MySpeech.SPEECH_AIUI);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BasePresenter.ACTION_MAIN_SPECIATYPE);
@@ -264,11 +296,13 @@ public class MainView extends PresenterActivity<MainPresenter> implements UDPAcc
 
     @Override
     public void onPauseReceiver() {
+        Log.e("GG", "Main onPauseReceiver");
         unregisterReceiver(handleReceiver);
     }
 
     @Override
     protected void onDestroy() {
+        Log.e("GG", "Main onDestroy");
         super.onDestroy();
 
         mLbmManager.unregisterReceiver(mUdpAcceptReceiver);

@@ -44,33 +44,34 @@ public class MyRecognizerListener implements RecognizerListener {
     @Override
     public void onResult(RecognizerResult recognizerResult, boolean b) {
         final String engineType = BankApplication.getInstance().getEngineType();
-        if (engineType.equals(SpeechConstant.TYPE_LOCAL)) {
-            if (null != recognizerResult && !TextUtils.isEmpty(recognizerResult.getResultString())) {
-//                String text = JsonParser.parseGrammarResult(recognizerResult.getResultString(), engineType);
-                Asr local = GsonUtil.GsonToBean(recognizerResult.getResultString(), Asr.class);
-
-                if (local.getSc() > 30) {
-                    StringBuffer sb = new StringBuffer();
-                    List<Ws> wsList = local.getWs();
-                    for (int i = 0; i < wsList.size(); i++) {
-                        Ws ws = wsList.get(i);
-                        List<Cw> cwList = ws.getCw();
-                        for (int j = 0; j < cwList.size(); j++) {
-                            Cw cw = cwList.get(j);
-                            sb.append(cw.getW());
-                        }
-                    }
-                    Log.e("GG", "置信度" + local.getSc());
-                    recognListener.onResult(sb.toString().trim());
-                } else {
-                    recognListener.onResult("置信度太小");
-                }
-            } else {
-                Log.e("GG", "recognizer result : null");
-                recognListener.onRecognDown();
-            }
-
-        } else if (engineType.equals(SpeechConstant.TYPE_CLOUD)) {
+//        if (engineType.equals(SpeechConstant.TYPE_LOCAL)) {
+//            if (null != recognizerResult && !TextUtils.isEmpty(recognizerResult.getResultString())) {
+////                String text = JsonParser.parseGrammarResult(recognizerResult.getResultString(), engineType);
+//                Asr local = GsonUtil.GsonToBean(recognizerResult.getResultString(), Asr.class);
+//
+//                if (local.getSc() > 30) {
+//                    StringBuffer sb = new StringBuffer();
+//                    List<Ws> wsList = local.getWs();
+//                    for (int i = 0; i < wsList.size(); i++) {
+//                        Ws ws = wsList.get(i);
+//                        List<Cw> cwList = ws.getCw();
+//                        for (int j = 0; j < cwList.size(); j++) {
+//                            Cw cw = cwList.get(j);
+//                            sb.append(cw.getW());
+//                        }
+//                    }
+//                    Log.e("GG", "置信度" + local.getSc());
+//                    recognListener.onResult(sb.toString().trim());
+//                } else {
+//                    recognListener.onResult("置信度太小");
+//                }
+//            } else {
+//                Log.e("GG", "recognizer result : null");
+//                recognListener.onRecognDown();
+//            }
+//
+//        } else
+        if (engineType.equals(SpeechConstant.TYPE_CLOUD)) {
             if (!b) {
 //                String text = JsonParser.parseIatResult(recognizerResult.getResultString());
                 StringBuffer sb = new StringBuffer();
@@ -121,6 +122,8 @@ public class MyRecognizerListener implements RecognizerListener {
             recognListener.onNetwork();
         } else if (10108 == speechError.getErrorCode()) {
             recognListener.onNetwork();
+        } else if (10107 == speechError.getErrorCode()) {
+//            recognListener.onNetwork();
         }
     }
 

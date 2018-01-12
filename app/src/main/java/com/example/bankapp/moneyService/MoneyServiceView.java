@@ -118,6 +118,8 @@ public class MoneyServiceView extends PresenterActivity<MoneyServicePresenter> i
     @Override
     public void onResumeVoice() {
 
+        //开启语音
+        mBaseHandler.sendEmptyMessageDelayed(100, 1000);
         mPresenter.setMySpeech(MySpeech.SPEECH_VOICE);
         IntentFilter filter = new IntentFilter();
         filter.addAction(BasePresenter.ACTION_OTHER_EXIT);

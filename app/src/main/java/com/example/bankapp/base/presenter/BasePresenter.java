@@ -136,6 +136,8 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
 
     public static boolean isVoice = true;//是否正在说话
 
+    private boolean isFirst = true;
+
     //拨打电话
     private TeleType teleType;
     public String TAG = this.getClass().getSimpleName();
@@ -418,13 +420,15 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
         synthesizerListener = new MySynthesizerListener(this);
         aiuiListener = new MyAiuiListener((Activity) mView.getContext(), this);
         recognizerListener = new MyRecognizerListener(this);
+        if (isFirst) {
+            setEngineType(SpeechConstant.TYPE_CLOUD);
+            initTts();
+            initAiui();
+            initIat();
+            buildIat();
+            isFirst = false;
+        }
 
-        setEngineType(SpeechConstant.TYPE_CLOUD);
-
-        initTts();
-        initAiui();
-        initIat();
-        buildIat();
         isSpeech = true;
         followType = FollowType.End;
     }
@@ -464,14 +468,14 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
 //            updateLocation("k0", contents, true);
         } else if (engineType.equals(SpeechConstant.TYPE_LOCAL)) {
             // 设置本地识别资源
-            mIat.setParameter(ResourceUtil.ASR_RES_PATH, getResAsrPath());
+//            mIat.setParameter(ResourceUtil.ASR_RES_PATH, getResAsrPath());
             // 设置语法构建路径
-            mIat.setParameter(ResourceUtil.GRM_BUILD_PATH, Constants.GRM_PATH);
+//            mIat.setParameter(ResourceUtil.GRM_BUILD_PATH, Constants.GRM_PATH);
             // 设置返回结果格式
             // 设置本地识别使用语法id
-            mIat.setParameter(SpeechConstant.LOCAL_GRAMMAR, "bank");
+//            mIat.setParameter(SpeechConstant.LOCAL_GRAMMAR, "bank");
             // 设置识别的门限值
-            mIat.setParameter(SpeechConstant.MIXED_THRESHOLD, "30");
+//            mIat.setParameter(SpeechConstant.MIXED_THRESHOLD, "30");
         }
 
         mIat.setParameter(SpeechConstant.RESULT_TYPE, "json");
@@ -577,52 +581,53 @@ public abstract class BasePresenter<T extends UiView> implements MySynthesizerLi
 //            type = "abnf";
         } else if (engineType.equals(SpeechConstant.TYPE_LOCAL)) {
             // 设置本地识别资源
-            mIat.setParameter(ResourceUtil.ASR_RES_PATH, getResAsrPath());
+//            mIat.setParameter(ResourceUtil.ASR_RES_PATH, getResAsrPath());
             // 设置语法构建路径
-            mIat.setParameter(ResourceUtil.GRM_BUILD_PATH, Constants.GRM_PATH);
+//            mIat.setParameter(ResourceUtil.GRM_BUILD_PATH, Constants.GRM_PATH);
             // 设置本地识别使用语法id
-            mIat.setParameter(SpeechConstant.LOCAL_GRAMMAR, "bank");
+//            mIat.setParameter(SpeechConstant.LOCAL_GRAMMAR, "bank");
             // 设置识别的门限值
-            mIat.setParameter(SpeechConstant.MIXED_THRESHOLD, "30");
+//            mIat.setParameter(SpeechConstant.MIXED_THRESHOLD, "30");
 
-            isBuild = PreferencesUtils.getBoolean(mView.getContext(), Constants.IAT_LOCAL_BUILD, false);
-            if (isBuild) {
-                isBuild = PreferencesUtils.getBoolean(mView.getContext(), Constants.IAT_CLOUD_BUILD, false);
-            }
-            content = new String(FucUtil.readFile(mView.getContext(), "bank.bnf", "utf-8"));
-            type = "bnf";
+//            isBuild = PreferencesUtils.getBoolean(mView.getContext(), Constants.IAT_LOCAL_BUILD, false);
+//            if (isBuild) {
+//                isBuild = PreferencesUtils.getBoolean(mView.getContext(), Constants.IAT_CLOUD_BUILD, false);
+//            }
+//            content = new String(FucUtil.readFile(mView.getContext(), "bank.bnf", "utf-8"));
+//            type = "bnf";
         }
         if (!isBuild) {
             ret = mIat.buildGrammar(type, content, new GrammarListener() {
                 @Override
                 public void onBuildFinish(String grammarId, SpeechError error) {
                     if (error == null) {
-                        if (engineType.equals(SpeechConstant.TYPE_LOCAL)) {
-                            Log.e("GG", "本地语法构建成功：" + grammarId);
-                            PreferencesUtils.putBoolean(mView.getContext(), Constants.IAT_LOCAL_BUILD, true);
-
-                            if (!PreferencesUtils.getBoolean(mView.getContext(), Constants.IAT_LOCAL_UPDATELEXICON, false)) {
-//                                String contents = FucUtil.readFile(mSoundView.getContext(), "local_userwords", "utf-8").replace(" ", "");
-                                String[] arrResult = resArray(R.array.local_voice_question);
-                                StringBuffer sb = new StringBuffer();
-                                for (int i = 0; i < arrResult.length; i++) {
-                                    sb.append(arrResult[i] + "\n");
-                                }
-                                String[] arrStandard = resArray(R.array.local_standard);
-                                for (int i = 0; i < arrStandard.length; i++) {
-                                    sb.append(arrStandard[i] + "\n");
-                                }
-                                updateLocation("voice", sb.toString());
-                            } else {
-                                if (!PreferencesUtils.getBoolean(mView.getContext(), Constants.IAT_CLOUD_BUILD, false)) {
-                                    initIat();
-                                }
-                            }
-                        } else if (engineType.equals(SpeechConstant.TYPE_CLOUD)) {
+//                        if (engineType.equals(SpeechConstant.TYPE_LOCAL)) {
+//                            Log.e("GG", "本地语法构建成功：" + grammarId);
+//                            PreferencesUtils.putBoolean(mView.getContext(), Constants.IAT_LOCAL_BUILD, true);
+//
+//                            if (!PreferencesUtils.getBoolean(mView.getContext(), Constants.IAT_LOCAL_UPDATELEXICON, false)) {
+////                                String contents = FucUtil.readFile(mSoundView.getContext(), "local_userwords", "utf-8").replace(" ", "");
+//                                String[] arrResult = resArray(R.array.local_voice_question);
+//                                StringBuffer sb = new StringBuffer();
+//                                for (int i = 0; i < arrResult.length; i++) {
+//                                    sb.append(arrResult[i] + "\n");
+//                                }
+//                                String[] arrStandard = resArray(R.array.local_standard);
+//                                for (int i = 0; i < arrStandard.length; i++) {
+//                                    sb.append(arrStandard[i] + "\n");
+//                                }
+//                                updateLocation("voice", sb.toString());
+//                            } else {
+//                                if (!PreferencesUtils.getBoolean(mView.getContext(), Constants.IAT_CLOUD_BUILD, false)) {
+//                                    initIat();
+//                                }
+//                            }
+//                        } else
+                        if (engineType.equals(SpeechConstant.TYPE_CLOUD)) {
                             Log.e("GG", "在线语法构建成功：" + grammarId);
                             PreferencesUtils.putBoolean(mView.getContext(), Constants.IAT_CLOUD_BUILD, true);
                             boolean isBuild = PreferencesUtils.getBoolean(mView.getContext(), Constants.IAT_LOCAL_BUILD, false);
-                            BankApplication.getInstance().setEngineType(SpeechConstant.TYPE_LOCAL);
+//                            BankApplication.getInstance().setEngineType(SpeechConstant.TYPE_LOCAL);
                             if (!isBuild) {
                                 initIat();
                             }
